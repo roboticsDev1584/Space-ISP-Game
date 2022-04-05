@@ -1,6 +1,2 @@
-# ScenesShellBasic
-
-A basic shell to serve as a starting point for using Scenes.
-It includes a MainScene, three Layers, and one Background object
-but is otherwise empty.
-
+# Space-ISP-Game
+This is where we will be storing our code for the CSI Space "Tank" ISP Game
