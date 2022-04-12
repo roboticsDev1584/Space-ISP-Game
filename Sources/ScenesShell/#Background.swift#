@@ -15,7 +15,7 @@ class Background : RenderableEntity {
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Int, planetWidth:Int) {
         let backgroundRect = Rect(size:canvasSz)
         let background = Rectangle(rect:backgroundRect, fillMode:.fillAndStroke)
-        let backgroundFill = FillStyle(color:Color(.black))
+        let backgroundFill = FillStyle(color:Color(.black)
         canvas.render(backgroundFill, background)
 
         let planetRect = Rect(topLeft:Point(x:((canvasSz.width) / 2 - planetWidth),y:((canvasSz.height) / 2 - planetHeight)), size:Size(width:planetWidth, height:planetHeight))
