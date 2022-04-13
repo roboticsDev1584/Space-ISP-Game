@@ -8,16 +8,8 @@ class Background : RenderableEntity {
     let saturn : Image
     let mercury : Image
 
-<<<<<<< HEAD
-class Background : RenderableEntity {
-    init() {
-        // Using a meaningful name can be helpful for debugging
 
-        super.init(name:"Background")
-        
-    }
-
-=======
+    
     let neptuneHeightPercent = 80.0
     let neptuneWidthPercent = 80.0
     let saturnHeightPercent = 60.0
@@ -83,5 +75,4 @@ class Background : RenderableEntity {
     //render mercury
     //renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:mercury, planetHeight:mercuryHeightPercent, planetWidth:mercuryWidthPercent)
     }
->>>>>>> ee0dc1237c40e2dbeba76fc904786d114ac5f5d9
 }
