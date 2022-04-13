@@ -1,5 +1,6 @@
-import Igis
+/*import Igis
 import Scenes
+
 class Ships: RenderableEntity {
     let lineWidth = LineWidth(width:10)
     canvas.render(lineWidth)
@@ -12,3 +13,4 @@ class Ships: RenderableEntity {
     override func calculate(canvasSize:Size) {
         let canvasBoundingRect = Rect(size:canvasSize)
         
+*/

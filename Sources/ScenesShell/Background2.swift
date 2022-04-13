@@ -2,7 +2,7 @@ import Foundation
 import Scenes
 import Igis
 
-class Background : RenderableEntity {
+class Background2 : RenderableEntity {
 
     let neptune : Image
     let saturn : Image
@@ -53,7 +53,7 @@ class Background : RenderableEntity {
         saturn = Image(sourceURL:saturnURL)
         mercury = Image(sourceURL:mercuryURL)
 
-        super.init(name:"Background")
+        super.init(name:"Background2")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
         //load the images
