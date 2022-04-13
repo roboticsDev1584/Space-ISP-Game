@@ -8,6 +8,8 @@ class Background : RenderableEntity {
     let saturn : Image
     let mercury : Image
 
+
+    
     let neptuneHeightPercent = 80.0
     let neptuneWidthPercent = 80.0
     let saturnHeightPercent = 60.0

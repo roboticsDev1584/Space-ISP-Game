@@ -11,6 +11,5 @@ class Ships: RenderableEntity {
         super.init(name"Ships")
     }
     override func calculate(canvasSize:Size) {
-        let canvasBoundingRect = Rect(size:canvasSize)
-        
+        let canvasBoundingRect = Rect(size:canvasSize)      
 */
