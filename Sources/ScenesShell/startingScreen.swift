@@ -24,7 +24,7 @@ class StartingScreen : RenderableEntity {
         let strokeStyle = StrokeStyle(color:Color(.navy))
         let lineWidth = LineWidth(width:5)
         let fillStyle = FillStyle(color:Color(.blue))
-        text = Text(location:Point(x:canvasSize.center.x-250, y:300), text:"Tank Game")
+        text = Text(location:Point(x:canvasSize.center.x-250, y:canvasSize.center.y-150), text:"Tank Game")
         text.font = "70pt Arial"
 
         canvas.render(lineWidth, strokeStyle, fillStyle, rectangle)
