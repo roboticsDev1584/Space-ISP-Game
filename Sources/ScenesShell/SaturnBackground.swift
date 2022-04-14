@@ -2,12 +2,11 @@ import Foundation
 import Scenes
 import Igis
 
-class MercuryBackground : RenderableEntity {
+class SaturnBackground : RenderableEntity {
 
-    let mercury : Image
-    let mercuryHeightPercent = 80.0
-    let mercuryWidthPercent = 80.0
-
+    let saturn : Image
+    let saturnHeightPercent = 60.0
+    let saturnWidthPercent = 96.0
     var canvasSizeC : Size
     
     //map rendering functions
@@ -33,22 +32,22 @@ class MercuryBackground : RenderableEntity {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         //form the image url
-        guard let mercuryURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Mercury_transit_2.jpg/600px-Mercury_transit_2.jpg") else {
+        guard let saturnURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg") else {
             fatalError("Failed to create neptune URL")
         }
         //form the image object
-        mercury = Image(sourceURL:mercuryURL)
-
-        super.init(name:"MercuryBackground")
+        saturn = Image(sourceURL:saturnURL)
+        
+        super.init(name:"SaturnBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
         //load the image
-        canvas.setup(mercury)
+        canvas.setup(saturn)
 
         canvasSizeC = canvasSize
     }
     override func render(canvas:Canvas) {
-        //render mercury
-        renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:mercury, planetHeight:mercuryHeightPercent, planetWidth:mercuryWidthPercent)
+        //render saturn
+        renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:saturn, planetHeight:saturnHeightPercent, planetWidth:saturnWidthPercent)
     }
 }

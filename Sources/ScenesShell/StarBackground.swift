@@ -2,12 +2,12 @@ import Foundation
 import Scenes
 import Igis
 
-class Background2 : RenderableEntity {
+class StarBackground : RenderableEntity {
 
     let neptune : Image
     let saturn : Image
     let mercury : Image
-
+    
     let neptuneHeightPercent = 80.0
     let neptuneWidthPercent = 80.0
     let saturnHeightPercent = 60.0
@@ -24,8 +24,11 @@ class Background2 : RenderableEntity {
         let backgroundFill = FillStyle(color:Color(.black))
         canvas.render(backgroundFill, background)
 
-        let scaledWidth = (planetWidth / 100.0) * Double(canvasSz.width)
-        let scaledHeight = (planetHeight / 100.0) * Double(canvasSz.height)
+        //variable used to denote the smallest canvasSize dimension
+        let canvasSzRef = (canvasSz.width < canvasSz.height) ? canvasSz.width : canvasSz.height
+        
+        let scaledWidth = (planetWidth / 100.0) * Double(canvasSzRef)
+        let scaledHeight = (planetHeight / 100.0) * Double(canvasSzRef)
         let planetRect = Rect(topLeft:Point(x:Int((Double(canvasSz.width) / 2.0) - (scaledWidth / 2.0)),y:Int((Double(canvasSz.height) / 2.0) - (scaledHeight / 2.0))), size:Size(width:Int(scaledWidth), height:Int(scaledHeight)))
         if planet.isReady {
             planet.renderMode = .destinationRect(planetRect)
@@ -53,7 +56,7 @@ class Background2 : RenderableEntity {
         saturn = Image(sourceURL:saturnURL)
         mercury = Image(sourceURL:mercuryURL)
 
-        super.init(name:"Background2")
+        super.init(name:"StarBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
         //load the images
