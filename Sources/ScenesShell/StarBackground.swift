@@ -5,16 +5,8 @@ import Igis
 class StarBackground : RenderableEntity {
 
     let neptune : Image
-    let saturn : Image
-    let mercury : Image
-    
     let neptuneHeightPercent = 80.0
     let neptuneWidthPercent = 80.0
-    let saturnHeightPercent = 60.0
-    let saturnWidthPercent = 96.0
-    let mercuryHeightPercent = 80.0
-    let mercuryWidthPercent = 80.0
-
     var canvasSizeC : Size
     
     //map rendering functions
@@ -39,41 +31,23 @@ class StarBackground : RenderableEntity {
     init() {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
-        
-        //form the image urls
+        //form the image url
         guard let neptuneURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Neptune_Full.jpg/600px-Neptune_Full.jpg") else {
             fatalError("Failed to create neptune URL")
         }
-        guard let saturnURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg") else {
-            fatalError("Failed to create neptune URL")
-        }
-        guard let mercuryURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Mercury_transit_2.jpg/600px-Mercury_transit_2.jpg") else {
-            fatalError("Failed to create neptune URL")
-        }
-
-        //form the image objects
+        //form the image object
         neptune = Image(sourceURL:neptuneURL)
-        saturn = Image(sourceURL:saturnURL)
-        mercury = Image(sourceURL:mercuryURL)
-
+        
         super.init(name:"StarBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
-        //load the images
+        //load the image
         canvas.setup(neptune)
-        canvas.setup(saturn)
-        canvas.setup(mercury)
 
         canvasSizeC = canvasSize
     }
     override func render(canvas:Canvas) {
         //render neptune
         renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:neptune, planetHeight:neptuneHeightPercent, planetWidth:neptuneWidthPercent)
-    
-    //render saturn
-    //renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:saturn, planetHeight:saturnHeightPercent, planetWidth:saturnWidthPercent)
-    
-    //render mercury
-    //renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:mercury, planetHeight:mercuryHeightPercent, planetWidth:mercuryWidthPercent)
     }
 }
