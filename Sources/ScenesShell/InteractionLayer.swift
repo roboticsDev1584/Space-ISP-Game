@@ -4,7 +4,7 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
     
-    let stars = Stars()
+
     let ship1 = Ship()
     let ship2 = Ship()
 
@@ -89,8 +89,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         super.init(name:"Interaction")
 
         //insert star object
-        insert(entity:stars, at:.front)
-        stars.changeVelocity(velocityX:3,velocityY:5)
 
         //insert ship objects
         insert(entity:ship1, at:.front)
