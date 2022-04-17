@@ -5,8 +5,8 @@ import Igis
 class InteractionLayer : Layer, KeyDownHandler {
     
 
-    let ship1 = Ship()
-    let ship2 = Ship()
+    let ship1 = Ships()
+    let ship2 = Ships()
 
     var ship1X = 0
     var ship2X = 0
@@ -80,9 +80,12 @@ class InteractionLayer : Layer, KeyDownHandler {
         default:
                 break
         }
+        /*
         print(ship1X, ship2X, ship1Y, ship2Y)
         ship1.move(x:ship1X,y:ship1Y)
         ship2.move(x:ship2X,y:ship2Y)
+        
+         */
     }
     
     init() {
@@ -96,13 +99,14 @@ class InteractionLayer : Layer, KeyDownHandler {
     }
     override func preSetup(canvasSize:Size, canvas:Canvas) {        
         //move ships to starting positions
+        /*
         ship1X = 60
         ship2X = canvasSize.width - 90
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
         ship1.move(x:ship1X,y:ship1Y)
         ship2.move(x:ship2X,y:ship2Y)
-
+        */
         dispatcher.registerKeyDownHandler(handler: self)
     }
     override func postTeardown() {
