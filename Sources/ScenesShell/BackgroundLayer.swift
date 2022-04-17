@@ -7,14 +7,14 @@ import Scenes
 
 
 class BackgroundLayer : Layer {
-      let MercuryBackground1 = MercuryBackground()
-      let NeptuneBackground1 = NeptuneBackground()
+      let Mercury1 = Mercury()
       init() {
           // Using a meaningful name can be helpful for debugging
           super.init(name:"Background")
           
           // We insert our RenderableEntities in the constructor
-          insert(entity:NeptuneBackground1, at:.back)
+          
+          insert(entity:Mercury1, at:.back)
       }
 }
     
