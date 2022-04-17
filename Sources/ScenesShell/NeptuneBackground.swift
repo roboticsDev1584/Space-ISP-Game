@@ -2,12 +2,6 @@ import Foundation
 import Scenes
 import Igis
 
-<<<<<<< HEAD
-class Background : RenderableEntity {
-    
-    init() {
-        
-=======
 class NeptuneBackground : RenderableEntity {
 
     let neptune : Image
@@ -56,5 +50,4 @@ class NeptuneBackground : RenderableEntity {
         //render neptune
         renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:neptune, planetHeight:neptuneHeightPercent, planetWidth:neptuneWidthPercent)
     }
->>>>>>> f91399284afb4404d4b732ea5992fd576a0a6a04
 }

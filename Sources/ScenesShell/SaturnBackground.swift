@@ -2,10 +2,6 @@ import Foundation
 import Scenes
 import Igis
 
-<<<<<<< HEAD
-class Background : RenderableEntity {
-    init() {
-=======
 class SaturnBackground : RenderableEntity {
 
     let saturn : Image
@@ -54,5 +50,4 @@ class SaturnBackground : RenderableEntity {
         //render saturn
         renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:saturn, planetHeight:saturnHeightPercent, planetWidth:saturnWidthPercent)
     }
->>>>>>> f91399284afb4404d4b732ea5992fd576a0a6a04
 }

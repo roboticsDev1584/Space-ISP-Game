@@ -2,11 +2,6 @@ import Foundation
 import Scenes
 import Igis
 
-<<<<<<< HEAD
-class Mercury : RenderableEntity {
-    init() {
-    
-=======
 class MercuryBackground : RenderableEntity {
 
     let mercury : Image
@@ -56,5 +51,4 @@ class MercuryBackground : RenderableEntity {
         //render mercury
         renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:mercury, planetHeight:mercuryHeightPercent, planetWidth:mercuryWidthPercent)
     }
->>>>>>> f91399284afb4404d4b732ea5992fd576a0a6a04
 }

@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 import Igis
 import Scenes
 
@@ -33,4 +30,3 @@ class Ships: RenderableEntity {
         ship(color:Color(.yellow),num:-40,canvas:canvas)
     }
 }
->>>>>>> f91399284afb4404d4b732ea5992fd576a0a6a04
