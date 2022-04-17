@@ -80,7 +80,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         default:
                 break
         }
-        print(ship1X, ship2X, ship1Y, ship2Y)
         ship1.move(x:ship1X,y:ship1Y)
         ship2.move(x:ship2X,y:ship2Y)
     }
