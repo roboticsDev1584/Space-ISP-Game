@@ -1,4 +1,5 @@
 import Scenes
+import Igis
 
 class BackgroundLayer : Layer {
 
