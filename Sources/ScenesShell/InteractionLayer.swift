@@ -14,7 +14,6 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2Y = 0
     var prevShip1Key = ""
     var prevShip2Key = ""
-
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
         case "ArrowUp": //move ship2 up
