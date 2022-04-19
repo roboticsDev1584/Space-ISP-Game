@@ -92,8 +92,8 @@ class InteractionLayer : Layer, KeyDownHandler {
         super.init(name:"Interaction")
 
         //insert star object
-        let ship1 = Ships(PointX:500,PointY:300,rotation:45.0,color:Color(.blue),num:40)
-        let ship2 = Ships(PointX:700,PointY:300,rotation:0.0,color:Color(.green),num:0)
+        let ship1 = Ships(PointX:500,PointY:300,rotation:45.0,color:Color(.blue))
+        let ship2 = Ships(PointX:700,PointY:300,rotation:0.0,color:Color(.green))
         //insert ship objects
         insert(entity:ship1, at:.front)
         insert(entity:ship2, at:.front)
