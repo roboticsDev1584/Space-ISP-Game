@@ -1,7 +1,8 @@
+import Igis
 import Scenes
 import Igis
 
-class BackgroundLayer : Layer {
+class BackgroundLayer : Layer, KeyDownHandler {
 
     let neptuneBackground = NeptuneBackground()
     let mercuryBackground = MercuryBackground()
@@ -17,9 +18,7 @@ class BackgroundLayer : Layer {
         super.init(name:"Background")
         
         // We insert our RenderableEntities in the constructor
-        
-        insert(entity:player2, at:.back)
     }
 }
-    
+
  
