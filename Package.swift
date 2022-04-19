@@ -5,8 +5,6 @@ import PackageDescription
 
 let package = Package(
     name: "ScenesShell",
-    dependencies: [
-    ],
     targets: [
         .target(
           name: "ScenesShell"),
