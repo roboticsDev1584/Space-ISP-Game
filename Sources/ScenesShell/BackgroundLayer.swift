@@ -16,7 +16,7 @@ class BackgroundLayer : Layer {
           super.init(name:"Background")
 
           // Insert background to render
-          insert(entity:startingScreen, at:.front)
+          insert(entity:startingScreen, at:.back)
 //          starBackground.begin()
     }
 }

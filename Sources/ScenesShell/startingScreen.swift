@@ -29,14 +29,14 @@ class StartingScreen : RenderableEntity {
         let canvasSize = canvas.canvasSize!
         
         let fillStyle = FillStyle(color:Color(.white))
-        text = Text(location:Point(x:canvasSize.center.x-290,y:canvasSize.center.y-150), text:"Tank Game")
+        text = Text(location:Point(x:canvasSize.center.x-260,y:canvasSize.center.y-150), text:"Space Force")
         text.font = "80pt callout"
         if background.isReady {
             canvas.render(background)
         }
         canvas.render(fillStyle, text)
 
-        text = Text(location:Point(x:canvasSize.center.x-220,y:canvasSize.center.y+250), text:"Press Enter To Start")
+        text = Text(location:Point(x:canvasSize.center.x-190,y:canvasSize.center.y+250), text:"Press Enter To Start")
         text.font = "30pt Ariel"
         canvas.render(text)
     }
