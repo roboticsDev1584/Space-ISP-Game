@@ -20,6 +20,7 @@ class BackgroundLayer : Layer {
         super.init(name:"Background")
         
         // We insert our RenderableEntities in the constructor
+        insert(entity:player1, at:.back)
     }
 }
 

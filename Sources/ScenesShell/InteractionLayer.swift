@@ -39,41 +39,35 @@ class InteractionLayer : Layer, KeyDownHandler {
             ship1X -= 3
             prevShip1Key = "left"
         case "r": //shoot from ship1
+            let projectile : Projectile
             switch(prevShip1Key) {
             case "up": //fire a projectile up
-                let projectile = Projectile(x:ship1X, y:ship1Y, fireVelocityX:0, fireVelocityY:-3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:270, fireVelocity:3)
             case "down": //fire a projectile down
-                let projectile = Projectile(x:ship1X, y:ship1Y, fireVelocityX:0, fireVelocityY:3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:90, fireVelocity:3)
             case "right": //fire a projectile right
-                let projectile = Projectile(x:ship1X, y:ship1Y, fireVelocityX:3, fireVelocityY:0)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:0, fireVelocity:3)
             case "left": //fire a projectile left
-                let projectile = Projectile(x:ship1X, y:ship1Y, fireVelocityX:-3, fireVelocityY:0)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
             default:
-                let projectile = Projectile(x:ship1X, y:ship1Y, fireVelocityX:0, fireVelocityY:-3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
             }
+            insert(entity:projectile, at:.front)
         case "/": //shoot from ship2
+            let projectile : Projectile
             switch(prevShip2Key) {
             case "up": //fire a projectile up
-                let projectile = Projectile(x:ship2X, y:ship2Y, fireVelocityX:0, fireVelocityY:-3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:270, fireVelocity:3)
             case "down": //fire a projectile down
-                let projectile = Projectile(x:ship2X, y:ship2Y, fireVelocityX:0, fireVelocityY:3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:90, fireVelocity:3)
             case "right": //fire a projectile right
-                let projectile = Projectile(x:ship2X, y:ship2Y, fireVelocityX:3, fireVelocityY:0)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:0, fireVelocity:3)
             case "left": //fire a projectile left
-                let projectile = Projectile(x:ship2X, y:ship2Y, fireVelocityX:-3, fireVelocityY:0)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
             default:
-                let projectile = Projectile(x:ship2X, y:ship2Y, fireVelocityX:0, fireVelocityY:-3)
-                insert(entity:projectile, at:.front)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
             }
+            insert(entity:projectile, at:.front)
         default:
                 break
         }
