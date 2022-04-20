@@ -93,15 +93,21 @@ class InteractionLayer : Layer, KeyDownHandler {
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
-                insert(entity:backgroundChoice, at:.back)
-                
+                insert(entity:player1, at:.back)
+            case "x" :
+                insert(entity:player2, at:.inFrontOf(object:player1))
+            case "l" :
+                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
-                insert(entity:neptuneBackground, at:.back)
+                insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
             case "m" :
-                insert(entity:mercuryBackground, at:.back)
+                insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
             case "f" :
-                insert(entity:saturnBackground, at:.back)
-        default:
+                insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
+            case "y" :
+                insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
+                starBackground.begin()
+            default:
                 break
         }
         updateShipPositions()
