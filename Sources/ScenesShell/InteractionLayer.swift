@@ -16,6 +16,16 @@ class InteractionLayer : Layer, KeyDownHandler {
     var prevShip1Key = ""
     var prevShip2Key = ""
 
+    let neptuneBackground = NeptuneBackground()
+    let mercuryBackground = MercuryBackground()
+    let saturnBackground = SaturnBackground()
+    let backgroundChoice = ChooseMap()
+    //conversion: 30 = 1 second
+    let starBackground = StarBackground(waitStar:90,changeStar:90,waitRedGiant:90,changeRedGiant:90,waitSupernova:60,enlargeBlackHole:90,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+
+    let startingScreen = StartingScreen()
+    let player1 = Player1Choose()
+    let player2 = Player2Choose()
     func updateShipPositions() {
         //update ship positions
         ship1.pointX = ship1X
@@ -51,7 +61,7 @@ class InteractionLayer : Layer, KeyDownHandler {
         case "a": //move ship1 left
             ship1X -= 3
             prevShip1Key = "left"
-        case "r": //shoot from ship1
+        case "r": //shoot from ship
             let projectile : Projectile
             switch(prevShip1Key) {
             case "up": //fire a projectile up
@@ -81,6 +91,16 @@ class InteractionLayer : Layer, KeyDownHandler {
                 projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
             }
             insert(entity:projectile, at:.front)
+            insert(entity:startingScreen, at:.back)
+            case "Enter" :
+                insert(entity:backgroundChoice, at:.back)
+                
+            case "n" :
+                insert(entity:neptuneBackground, at:.back)
+            case "m" :
+                insert(entity:mercuryBackground, at:.back)
+            case "f" :
+                insert(entity:saturnBackground, at:.back)
         default:
                 break
         }
