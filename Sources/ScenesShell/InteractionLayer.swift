@@ -4,12 +4,6 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
 
-    
-
-//    let ship1 = Ships(PointX:Int,PointY:Int,rotation:Int,color:Color,num:Int,canvas:Canvas)
-//    let ship2 = Ships(PointX:Int,PointY:Int,rotation:Int,color:Color,num:Int,canvas:Canvas)
-
-
     var ship1X = 0
     var ship2X = 0
     var ship1Y = 0
@@ -87,9 +81,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         let ship1 = Ships(PointX:500,PointY:300,rotation:45.0,color:Color(.blue))
         let ship2 = Ships(PointX:700,PointY:300,rotation:0.0,color:Color(.green))
         //initialize ship objects
-
-        
-
         //insert ship objects
         insert(entity:ship1, at:.front)
         insert(entity:ship2, at:.front)
