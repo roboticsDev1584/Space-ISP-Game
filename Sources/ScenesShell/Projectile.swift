@@ -6,14 +6,16 @@ class Projectile : RenderableEntity {
 
     var projectile : Ellipse
     let projectileBody : FillStyle
+    let projectileOutline : StrokeStyle
 
     let fireVelocity : Int
     let degree : Int
     
     init(x:Int, y:Int, degree:Int, fireVelocity:Int) {        
         //initialize the projectile object
-        projectile = Ellipse(center:Point(x:x,y:y), radiusX:10, radiusY:10)
+        projectile = Ellipse(center:Point(x:x,y:y), radiusX:10, radiusY:6)
         projectileBody = FillStyle(color:Color(.green))
+        projectileOutline = StrokeStyle(color:Color(.gray))
 
         //initialize the projectile variables
         self.fireVelocity = fireVelocity
