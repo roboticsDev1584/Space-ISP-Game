@@ -16,6 +16,16 @@ class InteractionLayer : Layer, KeyDownHandler {
     var prevShip1Key = ""
     var prevShip2Key = ""
 
+    let neptuneBackground = NeptuneBackground()
+    let mercuryBackground = MercuryBackground()
+    let saturnBackground = SaturnBackground()
+    let backgroundChoice = ChooseMap()
+    //conversion: 30 = 1 second
+    let starBackground = StarBackground(waitStar:90,changeStar:90,waitRedGiant:90,changeRedGiant:90,waitSupernova:60,enlargeBlackHole:90,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+
+    let startingScreen = StartingScreen()
+    let player1 = Player1Choose()
+    let player2 = Player2Choose()
     func updateShipPositions() {
         //update ship positions
         ship1.pointX = ship1X
@@ -55,7 +65,7 @@ class InteractionLayer : Layer, KeyDownHandler {
             //ship1X -= 3
             //ship1Rotate += 1.0
             prevShip1Key = "left"
-        case "r": //shoot from ship1
+        case "r": //shoot from ship
             let projectile : Projectile
             switch(prevShip1Key) {
             case "up": //fire a projectile up
@@ -85,7 +95,23 @@ class InteractionLayer : Layer, KeyDownHandler {
                 projectile = Projectile(x:ship2X, y:ship2Y, degree:180, fireVelocity:3)
             }
             insert(entity:projectile, at:.front)
-        default:
+            insert(entity:startingScreen, at:.back)
+            case "Enter" :
+                insert(entity:player1, at:.back)
+            case "x" :
+                insert(entity:player2, at:.inFrontOf(object:player1))
+            case "l" :
+                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+            case "n" :
+                insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
+            case "m" :
+                insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
+            case "f" :
+                insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
+            case "y" :
+                insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
+                starBackground.begin()
+            default:
                 break
         }
         if (ship1Rotate < 0.0) {
