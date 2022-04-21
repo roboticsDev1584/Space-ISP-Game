@@ -11,7 +11,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2X = 0
     var ship1Y = 0
     var ship2Y = 0
-    var ship1Rotate = 45.0
+    var ship1Rotate = 0.0
     var ship2Rotate = 0.0
     var prevShip1Key = ""
     var prevShip2Key = ""
@@ -45,11 +45,11 @@ class InteractionLayer : Layer, KeyDownHandler {
             prevShip2Key = "down"
         case "6": //move ship2 right
             //ship2X += 3
-            //ship2Rotate -= 1.0
+            ship2Rotate -= 1.0
             prevShip2Key = "right"
         case "4": //move ship2 left
             //ship2X -= 3
-            //ship2Rotate += 1.0
+            ship2Rotate += 1.0
             prevShip2Key = "left"
         case "w": //move ship1 up
             ship1Y -= 3
@@ -59,11 +59,11 @@ class InteractionLayer : Layer, KeyDownHandler {
             prevShip1Key = "down"
         case "d": //move ship1 right
             //ship1X += 3
-            //ship1Rotate -= 1.0
+            ship1Rotate -= 1.0
             prevShip1Key = "right"
         case "a": //move ship1 left
             //ship1X -= 3
-            //ship1Rotate += 1.0
+            ship1Rotate += 1.0
             prevShip1Key = "left"
         case "r": //shoot from ship
             let projectile : Projectile
