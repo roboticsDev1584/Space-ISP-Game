@@ -4,12 +4,29 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
 
+
+    var ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
+    var ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
+    
+
     var ship1X = 0
     var ship2X = 0
     var ship1Y = 0
     var ship2Y = 0
+    var ship1Rotate = 0.0
+    var ship2Rotate = 0.0
     var prevShip1Key = ""
     var prevShip2Key = ""
+
+    func updateShipPositions() {
+        //update ship positions
+        ship1.pointX = ship1X
+        ship1.pointY = ship1Y
+        ship2.pointX = ship2X
+        ship2.pointY = ship2Y
+        ship1.rotation = ship1Rotate
+        ship2.rotation = ship2Rotate
+    }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
         case "ArrowUp": //move ship2 up
@@ -69,18 +86,12 @@ class InteractionLayer : Layer, KeyDownHandler {
         default:
                 break
         }
-        //ship1.move(x:ship1X,y:ship1Y)
-        //ship2.move(x:ship2X,y:ship2Y)
+        updateShipPositions()
     }
     
     init() {
         super.init(name:"Interaction")
 
-
-        //insert star object
-        let ship1 = Ships(PointX:500,PointY:300,rotation:45.0,color:Color(.blue))
-        let ship2 = Ships(PointX:700,PointY:300,rotation:0.0,color:Color(.green))
-        //initialize ship objects
         //insert ship objects
         insert(entity:ship1, at:.front)
         insert(entity:ship2, at:.front)
@@ -91,8 +102,7 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2X = canvasSize.width - 90
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
-        //ship1.move(x:ship1X,y:ship1Y)
-        //ship2.move(x:ship2X,y:ship2Y)
+        updateShipPositions()
         
         dispatcher.registerKeyDownHandler(handler: self)
     }

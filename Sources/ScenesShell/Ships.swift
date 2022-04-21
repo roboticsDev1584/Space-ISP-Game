@@ -3,11 +3,13 @@ import Scenes
 import Foundation
 
 class Ships: RenderableEntity {
-    var lineWidth : LineWidth
-    var strokeStyle : StrokeStyle
-    var fillStyle : FillStyle
-    var lines : Path
     
+    let lineWidth : LineWidth
+    let strokeStyle : StrokeStyle
+    let fillStyle : FillStyle
+    var lines : Path
+
+
     var pointX : Int
     var pointY : Int
     var rotation : Double
@@ -29,20 +31,16 @@ class Ships: RenderableEntity {
     
     
     override func render(canvas:Canvas) {
-        var xvalue = pointX
-        var yvalue = pointY
-
-        let rotateX = cos(rotation * Double.pi / 180)
-        xvalue += Int(rotateX)
-        let rotateY = sin(rotation * Double.pi / 180)
-        yvalue += Int(rotateY)
-
+        let r = 30.0
         
-        lines.moveTo(Point(x:xvalue, y:yvalue))
-        lines.lineTo(Point(x:xvalue, y:yvalue+20))
-        lines.lineTo(Point(x:xvalue+30, y:yvalue+10))
-        lines.lineTo(Point(x:xvalue, y:yvalue))
+        lines = Path(fillMode:.fillAndStroke)
+        
+        lines.moveTo(Point(x:pointX+Int(r*cos(rotation)), y:pointY+Int(r*sin(rotation))))
+        lines.lineTo(Point(x:pointX+Int(r*cos(rotation+120.0)), y:pointY+Int(r*sin(rotation+120.0))))
+        lines.lineTo(Point(x:pointX+Int(r*cos(rotation+240.0)), y:pointY+Int(r*sin(rotation+240.0))))
+        lines.lineTo(Point(x:pointX+Int(r*cos(rotation)), y:pointY+Int(r*sin(rotation))))
         canvas.render(lineWidth, strokeStyle, fillStyle, lines)
+
         }
-        
+
 }
