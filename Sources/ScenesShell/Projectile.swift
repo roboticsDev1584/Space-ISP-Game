@@ -8,13 +8,13 @@ class Projectile : RenderableEntity {
     let projectileBody : FillStyle
     let projectileOutline : StrokeStyle
 
-    let fireVelocity : Int
-    let degree : Int
+    let fireVelocity : Double
+    let degree : Double
     
-    init(x:Int, y:Int, degree:Int, fireVelocity:Int) {        
+    init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color) {        
         //initialize the projectile object
-        projectile = Ellipse(center:Point(x:x,y:y), radiusX:10, radiusY:6)
-        projectileBody = FillStyle(color:Color(.green))
+        projectile = Ellipse(center:Point(x:x,y:y), radiusX:6, radiusY:6)
+        projectileBody = FillStyle(color:shipColor)
         projectileOutline = StrokeStyle(color:Color(.gray))
 
         //initialize the projectile variables
@@ -25,13 +25,13 @@ class Projectile : RenderableEntity {
     }
     
     override func render(canvas:Canvas) {
-        canvas.render(projectileBody, projectile)
+        canvas.render(projectileBody, projectileOutline, projectile)
     }
 
     override func calculate(canvasSize:Size) {
         //calculate the velocity for the projectile based on rotation of ship
-        let fireVelocityX = Int(Double(fireVelocity) * cos(Double(degree) * Double.pi / 180))
-        let fireVelocityY = Int(Double(fireVelocity) * sin(Double(degree) * Double.pi / 180))
+        let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))
+        let fireVelocityY = -Int(fireVelocity * sin(degree * Double.pi / 180.0))
         
         //update the projectile position
         projectile.center += Point(x:fireVelocityX, y:fireVelocityY)
