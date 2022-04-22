@@ -18,6 +18,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     var prevShip1Key = ""
     var prevShip2Key = ""
     let moveAmount = 3.0
+    let turnAmount = 3.0
 
     let neptuneBackground = NeptuneBackground()
     let mercuryBackground = MercuryBackground()
@@ -57,10 +58,10 @@ class InteractionLayer : Layer, KeyDownHandler {
             moveShip2(moveX:-moveAmount, moveY:-moveAmount)
             prevShip2Key = "backwards"
         case "6": //turn ship2 right
-            ship2Rotate -= 1.0
+            ship2Rotate -= turnAmount
             prevShip2Key = "right"
         case "4": //turn ship2 left
-            ship2Rotate += 1.0
+            ship2Rotate += turnAmount
             prevShip2Key = "left"
         case "w": //move ship1 forwards
             moveShip1(moveX:moveAmount, moveY:moveAmount)
@@ -69,10 +70,10 @@ class InteractionLayer : Layer, KeyDownHandler {
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
         case "d": //turn ship1 right
-            ship1Rotate -= 1.0
+            ship1Rotate -= turnAmount
             prevShip1Key = "right"
         case "a": //turn ship1 left
-            ship1Rotate += 1.0
+            ship1Rotate += turnAmount
             prevShip1Key = "left"
         case "r": //shoot from ship
             let projectile : Projectile
