@@ -30,6 +30,9 @@ class InteractionLayer : Layer, KeyDownHandler {
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
+    let WinnerScreen = winnerScreen()
+    let statusBar = StatusBar()
+    let Instructions = instructions()
     func updateShipPositions() {
         //update ship positions
         ship1.pointX = ship1X
@@ -99,20 +102,28 @@ class InteractionLayer : Layer, KeyDownHandler {
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
-                insert(entity:player1, at:.back)
+                insert(entity:Instructions, at:.back)
+            case "e" :
+                insert(entity:player1, at:.inFrontOf(object:Instructions))
             case "x" :
                 insert(entity:player2, at:.inFrontOf(object:player1))
             case "l" :
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
+                insert(entity:statusBar, at:.front)
             case "m" :
                 insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
+                insert(entity:statusBar, at:.front)
             case "f" :
                 insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
+                insert(entity:statusBar, at:.front)
             case "y" :
                 insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
                 starBackground.begin()
+                insert(entity:statusBar, at:.front)
+            case "q" :
+                insert(entity:WinnerScreen, at:.inFrontOf(object:starBackground))
             default:
                 break
         }
