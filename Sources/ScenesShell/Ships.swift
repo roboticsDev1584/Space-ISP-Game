@@ -31,6 +31,8 @@ class Ships: RenderableEntity {
     override func render(canvas:Canvas) {
         //recreate the ship object
         let r = 26.0
+        let turretLength = 14.0
+          
         lines = Path(fillMode:.fillAndStroke)
         //go to point a
         lines.moveTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
@@ -40,7 +42,17 @@ class Ships: RenderableEntity {
         lines.lineTo(Point(x:pointX+Int((r*cos((rotation+240.0)*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+240.0)*(Double.pi / 180.0))))))
         //go back to point a
         lines.lineTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
+        
+        //create front turret
+        lines.lineTo(Point(x:pointX+Int(((r+turretLength)*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int(((r+turretLength)*sin(rotation*(Double.pi / 180.0))))))
 
+        //create back turrets
+        lines.moveTo(Point(x:pointX+Int((r*cos((rotation+120.0)*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+120.0)*(Double.pi / 180.0))))))
+        lines.lineTo(Point(x:pointX+Int((r*cos((rotation+120.0)*(Double.pi / 180.0))))+Int(((turretLength)*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+120.0)*(Double.pi / 180.0))))-Int(((turretLength)*sin(rotation*(Double.pi / 180.0))))))
+        
+        lines.moveTo(Point(x:pointX+Int((r*cos((rotation+240.0)*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+240.0)*(Double.pi / 180.0))))))
+        lines.lineTo(Point(x:pointX+Int((r*cos((rotation+240.0)*(Double.pi / 180.0))))+Int(((turretLength)*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+240.0)*(Double.pi / 180.0))))-Int(((turretLength)*sin(rotation*(Double.pi / 180.0))))))
+        
         //update the ship
         canvas.render(lineWidth, strokeStyle, fillStyle, lines)
     }

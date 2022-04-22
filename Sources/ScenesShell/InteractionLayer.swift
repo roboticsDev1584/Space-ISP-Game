@@ -79,22 +79,22 @@ class InteractionLayer : Layer, KeyDownHandler {
             let projectile : Projectile
             switch(prevShip1Key) {
             case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
             case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue))
             default:
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
             }
             insert(entity:projectile, at:.front)
         case "7": //shoot from ship2
             let projectile : Projectile
             switch(prevShip2Key) {
             case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
             case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen))
             default:
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
             }
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
