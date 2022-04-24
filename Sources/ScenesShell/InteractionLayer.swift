@@ -17,8 +17,14 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2FireVelocity = 3.0
     var prevShip1Key = ""
     var prevShip2Key = ""
+
     let moveAmount = 3.0
     let turnAmount = 3.0
+    var timeAmount = "0:10"
+    var ship1Lives = 3
+    var ship2Lives = 3
+    var gameEnded = false
+    var gameWin = 0
 
     let neptuneBackground = NeptuneBackground()
     let mercuryBackground = MercuryBackground()
@@ -31,8 +37,9 @@ class InteractionLayer : Layer, KeyDownHandler {
     let player1 = Player1Choose()
     let player2 = Player2Choose()
     let WinnerScreen = winnerScreen()
-    let statusBar = StatusBar()
     let Instructions = instructions()
+    var statusBar = StatusBar(s1Life:0, s2Life:0, time:"00:00")
+
     func updateShipPositions() {
         //update ship positions
         ship1.pointX = ship1X
@@ -108,6 +115,11 @@ class InteractionLayer : Layer, KeyDownHandler {
             case "x" :
                 insert(entity:player2, at:.inFrontOf(object:player1))
             case "l" :
+                //player decides game settings- max lives and time right before this
+                //ship1Lives set by user
+                //ship2Lives set by user
+                //timeAmount set by user
+                statusBar = StatusBar(s1Life:ship1Lives, s2Life:ship2Lives, time:timeAmount)
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
@@ -156,11 +168,24 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
-        
+
+        //just for now
+        statusBar = StatusBar(s1Life:ship1Lives, s2Life:ship2Lives, time:timeAmount)
+        insert(entity:statusBar, at:.front)
         dispatcher.registerKeyDownHandler(handler: self)
     }
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
+    }
+
+    //this runs after calculating entities, not working at the moment
+    func postCalculate() {
+        statusBar.updateGameStatus(endVar:&gameEnded, winVar:&gameWin)
+        print(gameEnded)
+        print(gameWin)
+        if (gameEnded) {
+            print("Game over!")
+        }
     }
     
 }
