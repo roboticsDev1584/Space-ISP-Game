@@ -3,18 +3,26 @@ import Igis
 import Foundation
 
 class StatusBar : RenderableEntity {
-    var player1Life : Int
-    var player2Life : Int
+    var player1Life = 0
+    var player2Life = 0
     var time : String
+    
     var count = 0
     var end = false
     var win = 0
+    var endPointer : UnsafeMutablePointer<Bool>
+    var winPointer : UnsafeMutablePointer<Int>
+    var exP1LifePointer : UnsafeMutablePointer<Int>
+    var exP2LifePointer : UnsafeMutablePointer<Int>
 
     //need some way to indicate to InteractionLayer.swift that the game has ended
-    init(s1Life:Int, s2Life:Int, time:String) {
-        self.player1Life = s1Life
-        self.player2Life = s2Life
+    init(time:String) {
         self.time = time
+        endPointer = .init(&self.end)
+        winPointer = .init(&self.win)
+        exP1LifePointer = .init(&self.player1Life)
+        exP2LifePointer = .init(&self.player2Life)
+        
         super.init(name:"StatusBar")
     }
 
@@ -27,10 +35,12 @@ class StatusBar : RenderableEntity {
         }
     }
 
-    //returns the game status, such as if ended or not and win state
-    func updateGameStatus(endVar:inout Bool, winVar:inout Int) {
-        endVar = end
-        winVar = win
+    //links the game status, such as if ended or not and win state
+    func linkStatusVariables(endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int) {
+        endPointer = .init(&endVar)
+        winPointer = .init(&winVar)
+        exP1LifePointer = .init(&p1Life)
+        exP2LifePointer = .init(&p2Life)
     }
     
     override func render(canvas:Canvas) {
@@ -68,6 +78,10 @@ class StatusBar : RenderableEntity {
             //updates the time string to display the new time
             time = "\(minutes):\(zeroSec)\(seconds % 10)"
         }
+        //receives the life data
+        player1Life = exP1LifePointer.pointee
+        player2Life = exP2LifePointer.pointee
+        
         if (player1Life <= 0) {
             end = true
             win = 2
@@ -76,7 +90,7 @@ class StatusBar : RenderableEntity {
             end = true
             win = 1
         }
-
+        
         if (!end) {
         //render banner text
         let fillStyle = FillStyle(color:Color(.white))
@@ -95,6 +109,9 @@ class StatusBar : RenderableEntity {
         else {
             //deletes the banner
             canvas.render()
+            //send the end and win data
+            endPointer.pointee = end
+            winPointer.pointee = win
         }
 
         count += 1

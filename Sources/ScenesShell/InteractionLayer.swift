@@ -13,14 +13,14 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2Y = 0
     var ship1Rotate = 0.0
     var ship2Rotate = 180.0
-    var ship1FireVelocity = 3.0
+    var ship1FireVelocity = 10.0
     var ship2FireVelocity = 3.0
     var prevShip1Key = ""
     var prevShip2Key = ""
 
     let moveAmount = 3.0
     let turnAmount = 3.0
-    var timeAmount = "0:10"
+    var timeAmount = "10:00"
     var ship1Lives = 3
     var ship2Lives = 3
     var gameEnded = false
@@ -38,7 +38,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let player2 = Player2Choose()
     let WinnerScreen = winnerScreen()
     let Instructions = instructions()
-    var statusBar = StatusBar(s1Life:0, s2Life:0, time:"00:00")
+    var statusBar = StatusBar(time:"00:00")
 
     func updateShipPositions() {
         //update ship positions
@@ -76,6 +76,10 @@ class InteractionLayer : Layer, KeyDownHandler {
         case "w": //move ship1 forwards
             moveShip1(moveX:moveAmount, moveY:moveAmount)
             prevShip1Key = "forwards"
+            //print("end: " + String(gameEnded)) //just for now
+            //print("win: " + String(gameWin)) //just for now
+            //print("p1Lives: " + String(ship1Lives)) //just for now
+            //print("p2Lives: " + String(ship2Lives)) //just for now
         case "s": //move ship1 backwards
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
@@ -86,18 +90,25 @@ class InteractionLayer : Layer, KeyDownHandler {
             ship1Rotate += turnAmount
             prevShip1Key = "left"
         case "r": //shoot from ship
-            let projectile : Projectile
+            var projectile : Projectile
             switch(prevShip1Key) {
             case "forwards": //fire a projectile forwards
                 projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+                //link the projectile pointers
+                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             case "backwards": //fire a projectile backwards
                 projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue))
+                //link the projectile pointers
+                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             default:
                 projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             }
+            //link the projectile pointers
+            //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             insert(entity:projectile, at:.front)
         case "7": //shoot from ship2
-            let projectile : Projectile
+            var projectile : Projectile
             switch(prevShip2Key) {
             case "forwards": //fire a projectile forwards
                 projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
@@ -106,6 +117,8 @@ class InteractionLayer : Layer, KeyDownHandler {
             default:
                 projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
             }
+            //link the projectile pointers
+            projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
@@ -119,7 +132,7 @@ class InteractionLayer : Layer, KeyDownHandler {
                 //ship1Lives set by user
                 //ship2Lives set by user
                 //timeAmount set by user
-                statusBar = StatusBar(s1Life:ship1Lives, s2Life:ship2Lives, time:timeAmount)
+                statusBar = StatusBar(time:timeAmount)
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
@@ -169,23 +182,15 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
 
-        //just for now
-        statusBar = StatusBar(s1Life:ship1Lives, s2Life:ship2Lives, time:timeAmount)
-        insert(entity:statusBar, at:.front)
+        statusBar = StatusBar(time:timeAmount)
+        statusBar.linkStatusVariables(endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
         dispatcher.registerKeyDownHandler(handler: self)
+        
+        //just for now
+        insert(entity:statusBar, at:.front)
     }
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
-    }
-
-    //this runs after calculating entities, not working at the moment
-    func postCalculate() {
-        statusBar.updateGameStatus(endVar:&gameEnded, winVar:&gameWin)
-        print(gameEnded)
-        print(gameWin)
-        if (gameEnded) {
-            print("Game over!")
-        }
     }
     
 }
