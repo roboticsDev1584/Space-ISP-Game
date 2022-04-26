@@ -15,6 +15,8 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2Rotate = 180.0
     var ship1FireVelocity = 10.0
     var ship2FireVelocity = 3.0
+    var ship1Color = Color(.white)
+    var ship2Color = Color(.white)
     var prevShip1Key = ""
     var prevShip2Key = ""
 
@@ -48,6 +50,8 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2.pointY = ship2Y
         ship1.rotation = ship1Rotate
         ship2.rotation = ship2Rotate
+        ship1.color = ship1Color
+        ship2.color = ship2Color
     }
     //update the ship1X and ship1Y values
     func moveShip1(moveX:Double, moveY:Double) {
@@ -125,8 +129,18 @@ class InteractionLayer : Layer, KeyDownHandler {
                 insert(entity:Instructions, at:.back)
             case "e" :
                 insert(entity:player1, at:.inFrontOf(object:Instructions))
-            case "x" :
+            case "o" :
+                ship1Color = Color(.blue)
                 insert(entity:player2, at:.inFrontOf(object:player1))
+            case "u" :
+                ship1Color = Color(.green)
+                insert(entity:player2, at:.inFrontOf(object:player1))
+            case "t" :
+                ship1Color = Color(.red)
+                insert(entity:player2, at:.inFrontOf(object:player1))
+            case "r" :
+                ship1Color = Color(.yellow)
+                insert(entity:player2, at:.inFrontof(object:player1))
             case "l" :
                 //player decides game settings- max lives and time right before this
                 //ship1Lives set by user
