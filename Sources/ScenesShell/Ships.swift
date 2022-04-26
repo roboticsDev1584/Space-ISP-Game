@@ -52,7 +52,7 @@ class Ships: RenderableEntity {
         
         lines.moveTo(Point(x:pointX+Int((r*cos((rotation+240.0)*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+240.0)*(Double.pi / 180.0))))))
         lines.lineTo(Point(x:pointX+Int((r*cos((rotation+240.0)*(Double.pi / 180.0))))+Int(((turretLength)*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+240.0)*(Double.pi / 180.0))))-Int(((turretLength)*sin(rotation*(Double.pi / 180.0))))))
-        
+        fillStyle = FillStyle(color:color)
         //update the ship
         canvas.render(lineWidth, strokeStyle, fillStyle, lines)
     }

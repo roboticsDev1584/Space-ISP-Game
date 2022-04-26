@@ -57,11 +57,41 @@ class Projectile : RenderableEntity {
         lives2Pointer = .init(&p2Lives)
         lives1 = lives1Pointer.pointee
         lives2 = lives2Pointer.pointee
-        print(String(lives1))
-        print(String(lives2))
     }
     
     override func render(canvas:Canvas) {
+        //calculate the velocity for the projectile based on rotation of ship
+        let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))
+        let fireVelocityY = -Int(fireVelocity * sin(degree * Double.pi / 180.0))
+        
+        //update the projectile position
+        projectile.center += Point(x:fireVelocityX, y:fireVelocityY)
+        
+        //if projectile hits player 1
+        if (projectile.center.x == ship1XPointer.pointee && projectile.center.y == ship1YPointer.pointee) {
+            terminate = true
+            //player 1 loses one life
+            self.lives1 -= 1
+        }
+        //if projectile hits player 2
+        else if (projectile.center.x == ship2XPointer.pointee && projectile.center.y == ship2YPointer.pointee) {
+            terminate = true
+            //player 2 loses one life
+            self.lives2 -= 1
+        }
+        print("lives1: " + String(self.lives1))
+        print("lives2: " + String(self.lives2))
+
+        lives1Pointer.pointee = self.lives1
+        lives2Pointer.pointee = self.lives2
+
+        if (lives1Pointer.pointee != 3) {
+            print(lives1Pointer.pointee)
+        }
+        else if (lives2Pointer.pointee != 3) {
+            print(lives2Pointer.pointee)
+        }
+        
         if (!terminate) {
             canvas.render(projectileBody, projectileOutline, projectile)
         }
@@ -69,10 +99,9 @@ class Projectile : RenderableEntity {
         else {
             canvas.render()
         }
-        print("running")
     }
 
-    override func calculate(canvasSize:Size) {
+    /*override func calculate(canvasSize:Size) {
        //calculate the velocity for the projectile based on rotation of ship
         let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))
         let fireVelocityY = -Int(fireVelocity * sin(degree * Double.pi / 180.0))
@@ -84,21 +113,19 @@ class Projectile : RenderableEntity {
         if (projectile.center.x == ship1XPointer.pointee && projectile.center.y == ship1YPointer.pointee) {
             terminate = true
             //player 1 loses one life
-            lives1 -= 1
-            print("hit!")
-            print(String(lives1))
+            self.lives1 -= 1
         }
         //if projectile hits player 2
         else if (projectile.center.x == ship2XPointer.pointee && projectile.center.y == ship2YPointer.pointee) {
             terminate = true
             //player 2 loses one life
-            lives2 -= 1
-            print("hit!")
-            print(String(lives2))
+            self.lives2 -= 1
         }
+        print("lives1: " + String(self.lives1))
+        print("lives2: " + String(self.lives2))
 
-        lives1Pointer.pointee = lives1
-        lives2Pointer.pointee = lives2
+        lives1Pointer.pointee = self.lives1
+        lives2Pointer.pointee = self.lives2
 
         if (lives1Pointer.pointee != 3) {
             print(lives1Pointer.pointee)
@@ -106,5 +133,5 @@ class Projectile : RenderableEntity {
         else if (lives2Pointer.pointee != 3) {
             print(lives2Pointer.pointee)
         }
-    }
+    }*/
 }
