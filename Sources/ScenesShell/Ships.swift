@@ -5,7 +5,7 @@ import Foundation
 class Ships: RenderableEntity {
     let lineWidth : LineWidth
     let strokeStyle : StrokeStyle
-    let fillStyle : FillStyle
+    var fillStyle : FillStyle
     var lines : Path
 
     var pointX : Int
@@ -33,6 +33,7 @@ class Ships: RenderableEntity {
         let r = 26.0
         let turretLength = 14.0
           
+        fillStyle = FillStyle(color:color)
         lines = Path(fillMode:.fillAndStroke)
         //go to point a
         lines.moveTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
