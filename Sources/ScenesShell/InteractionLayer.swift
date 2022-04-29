@@ -13,8 +13,8 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship2Y = 0
     var ship1Rotate = 0.0
     var ship2Rotate = 180.0
-    var ship1FireVelocity = 10.0
-    var ship2FireVelocity = 3.0
+    var ship1FireVelocity = 6.0
+    var ship2FireVelocity = 6.0
     var ship1Color = Color(.white)
     var ship2Color = Color(.white)
     var prevShip1Key = ""
@@ -80,10 +80,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         case "w": //move ship1 forwards
             moveShip1(moveX:moveAmount, moveY:moveAmount)
             prevShip1Key = "forwards"
-            //print("end: " + String(gameEnded)) //just for now
-            //print("win: " + String(gameWin)) //just for now
-            //print("p1Lives: " + String(ship1Lives)) //just for now
-            //print("p2Lives: " + String(ship2Lives)) //just for now
         case "s": //move ship1 backwards
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
@@ -94,7 +90,6 @@ class InteractionLayer : Layer, KeyDownHandler {
             ship1Rotate += turnAmount
             prevShip1Key = "left"
         case "r": //shoot from ship
-            //var projectile : Projectile
             switch(prevShip1Key) {
             case "forwards": //fire a projectile forwards
                 let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
@@ -105,9 +100,7 @@ class InteractionLayer : Layer, KeyDownHandler {
             default:
                 let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
                 insert(entity:projectile, at:.front)
-                //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             }
-            //insert(entity:projectile, at:.front)
         case "7": //shoot from ship2
             var projectile : Projectile
             switch(prevShip2Key) {
