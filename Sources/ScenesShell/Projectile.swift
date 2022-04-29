@@ -14,20 +14,20 @@ class Projectile : RenderableEntity {
     var lives1 = 0
     var lives2 = 0
 
-    var randomInt1 = 0
+    /*var randomInt1 = 0
     var randomInt2 = 0
     var randomInt3 = 0
     var randomInt4 = 0
     var randomInt5 = 0
-    var randomInt6 = 0
-    var ship1XPointer : UnsafeMutablePointer<Int>
+    var randomInt6 = 0*/
+    /*var ship1XPointer : UnsafeMutablePointer<Int>
     var ship2XPointer : UnsafeMutablePointer<Int>
     var ship1YPointer : UnsafeMutablePointer<Int>
     var ship2YPointer : UnsafeMutablePointer<Int>
     var lives1Pointer : UnsafeMutablePointer<Int>
-    var lives2Pointer : UnsafeMutablePointer<Int>
+    var lives2Pointer : UnsafeMutablePointer<Int>*/
     
-    init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color) {        
+    init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int) {        
         //initialize the projectile object
         projectile = Ellipse(center:Point(x:x,y:y), radiusX:6, radiusY:6)
         projectileBody = FillStyle(color:shipColor)
@@ -38,17 +38,19 @@ class Projectile : RenderableEntity {
         self.degree = degree
         self.terminate = false
 
-        ship1XPointer = .init(&randomInt1)
-        ship2XPointer = .init(&randomInt2)
-        ship1YPointer = .init(&randomInt3)
-        ship2YPointer = .init(&randomInt4)
-        lives1Pointer = .init(&randomInt5)
-        lives2Pointer = .init(&randomInt6)
+        /*ship1XPointer = .init(&ship1X)
+        ship2XPointer = .init(&ship2X)
+        ship1YPointer = .init(&ship1Y)
+        ship2YPointer = .init(&ship2Y)
+        lives1Pointer = .init(&p1Lives)
+        lives2Pointer = .init(&p2Lives)
+        self.lives1 = lives1Pointer.pointee
+        self.lives2 = lives2Pointer.pointee*/
         
         super.init(name:"Projectile")
     }
 
-    func linkShipVariables(ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int) {
+    /*func linkShipVariables(ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int) {
         ship1XPointer = .init(&ship1X)
         ship2XPointer = .init(&ship2X)
         ship1YPointer = .init(&ship1Y)
@@ -57,7 +59,7 @@ class Projectile : RenderableEntity {
         lives2Pointer = .init(&p2Lives)
         lives1 = lives1Pointer.pointee
         lives2 = lives2Pointer.pointee
-    }
+    }*/
     
     override func render(canvas:Canvas) {
         //calculate the velocity for the projectile based on rotation of ship
@@ -68,29 +70,36 @@ class Projectile : RenderableEntity {
         projectile.center += Point(x:fireVelocityX, y:fireVelocityY)
         
         //if projectile hits player 1
+        /*print(String(projectile.center.x))
+        print(String(ship2XPointer.pointee)
+        print(String(projectile.center.y))
+        print(String(ship2YPointer.pointee)*/
         if (projectile.center.x == ship1XPointer.pointee && projectile.center.y == ship1YPointer.pointee) {
             terminate = true
             //player 1 loses one life
-            self.lives1 -= 1
+            lives1 -= 1
+            print("hit!")
         }
         //if projectile hits player 2
         else if (projectile.center.x == ship2XPointer.pointee && projectile.center.y == ship2YPointer.pointee) {
             terminate = true
             //player 2 loses one life
-            self.lives2 -= 1
+            lives2 -= 1
+            print("hit!")
+            print("lives2: " + String(lives2))
         }
-        print("lives1: " + String(self.lives1))
-        print("lives2: " + String(self.lives2))
+        //print("lives1: " + String(lives1))
+        //print("lives2: " + String(lives2))
 
-        lives1Pointer.pointee = self.lives1
-        lives2Pointer.pointee = self.lives2
+        lives1Pointer.pointee = lives1
+        lives2Pointer.pointee = lives2
 
-        if (lives1Pointer.pointee != 3) {
+        /*if (lives1Pointer.pointee != 3) {
             print(lives1Pointer.pointee)
         }
         else if (lives2Pointer.pointee != 3) {
             print(lives2Pointer.pointee)
-        }
+        }*/
         
         if (!terminate) {
             canvas.render(projectileBody, projectileOutline, projectile)

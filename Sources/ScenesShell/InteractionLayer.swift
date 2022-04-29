@@ -4,8 +4,8 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
 
-    var ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
-    var ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
+    var ship1 : Ships
+    var ship2 : Ships
     
     var ship1X = 0
     var ship2X = 0
@@ -40,7 +40,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let player2 = Player2Choose()
     let WinnerScreen = winnerScreen()
     let Instructions = instructions()
-    var statusBar = StatusBar(time:"00:00")
+    var statusBar : StatusBar
 
     func updateShipPositions() {
         //update ship positions
@@ -82,8 +82,8 @@ class InteractionLayer : Layer, KeyDownHandler {
             prevShip1Key = "forwards"
             //print("end: " + String(gameEnded)) //just for now
             //print("win: " + String(gameWin)) //just for now
-            //print("p1Lives: " + String(ship1Lives)) //just for now
-            //print("p2Lives: " + String(ship2Lives)) //just for now
+            print("p1Lives: " + String(ship1Lives)) //just for now
+            print("p2Lives: " + String(ship2Lives)) //just for now
         case "s": //move ship1 backwards
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
@@ -97,16 +97,16 @@ class InteractionLayer : Layer, KeyDownHandler {
             var projectile : Projectile
             switch(prevShip1Key) {
             case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
                 //link the projectile pointers
-                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue))
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
                 //link the projectile pointers
-                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             default:
-                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
-                projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             }
             //link the projectile pointers
             //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
@@ -115,14 +115,14 @@ class InteractionLayer : Layer, KeyDownHandler {
             var projectile : Projectile
             switch(prevShip2Key) {
             case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             default:
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
+                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             }
             //link the projectile pointers
-            projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+            //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
@@ -138,15 +138,10 @@ class InteractionLayer : Layer, KeyDownHandler {
             case "t" :
                 ship1Color = Color(.red)
                 insert(entity:player2, at:.inFrontOf(object:player1))
-            case "r" :
-                ship1Color = Color(.yellow)
-                insert(entity:player2, at:.inFrontof(object:player1))
+                /*case "r" :
+                  ship1Color = Color(.yellow)
+                  insert(entity:player2, at:.inFrontof(object:player1))*/
             case "l" :
-                //player decides game settings- max lives and time right before this
-                //ship1Lives set by user
-                //ship2Lives set by user
-                //timeAmount set by user
-                statusBar = StatusBar(time:timeAmount)
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
@@ -182,9 +177,13 @@ class InteractionLayer : Layer, KeyDownHandler {
     }
     
     init() {
-        super.init(name:"Interaction")
+        statusBar = StatusBar(time:timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        //statusBar.linkStatusVariables(endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
+        ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
 
-        //insert ship objects
+        super.init(name:"Interaction")
+        
         insert(entity:ship1, at:.front)
         insert(entity:ship2, at:.front)
     }
@@ -196,8 +195,6 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
 
-        statusBar = StatusBar(time:timeAmount)
-        statusBar.linkStatusVariables(endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
         dispatcher.registerKeyDownHandler(handler: self)
         
         //just for now

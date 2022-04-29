@@ -5,7 +5,7 @@ import Foundation
 class Ships: RenderableEntity {
     let lineWidth : LineWidth
     let strokeStyle : StrokeStyle
-    let fillStyle : FillStyle
+    var fillStyle : FillStyle
     var lines : Path
 
     var pointX : Int
