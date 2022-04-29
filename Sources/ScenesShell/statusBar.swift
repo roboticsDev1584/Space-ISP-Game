@@ -3,58 +3,38 @@ import Igis
 import Foundation
 
 class StatusBar : RenderableEntity {
-    static var player1Life = 3
-    static var player2Life = 3
+    var player1Life = 3
+    var player2Life = 3
     var time = "0:00"
     
     var count = 0
     var end = false
     var win = 0
 
-    //var randomInt1 = 0
-    //var randomInt2 = 0
     var endPointer : UnsafeMutablePointer<Bool>
     var winPointer : UnsafeMutablePointer<Int>
     var timePointer : UnsafeMutablePointer<String>
-    //var exP1LifePointer : UnsafeMutablePointer<Int>
-    //var exP2LifePointer : UnsafeMutablePointer<Int>
-    //var localP1LifePointer : UnsafeMutablePointer<Int> 
-    //var localP2LifePointer : UnsafeMutablePointer<Int>
+    var p1LifePointer : UnsafeMutablePointer<Int>
+    var p2LifePointer : UnsafeMutablePointer<Int>
 
     //need some way to indicate to InteractionLayer.swift that the game has ended
     init(timer:inout String, endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int) {
         timePointer = .init(&timer)
         endPointer = .init(&endVar)
         winPointer = .init(&winVar)
-        //exP1LifePointer = .init(&p1Life)
-        //exP2LifePointer = .init(&p2Life)
-        //localP1LifePointer = .init(&self.player1Life)
-        //localP2LifePointer = .init(&self.player2Life)
+        p1LifePointer = .init(&p1Life)
+        p2LifePointer = .init(&p2Life)
         
         super.init(name:"StatusBar")
     }
 
-    /*func subtractLives (player:Int, lives:Int) {
-        if (player == 1) {
-            player1Life -= lives
-        }
-        else if (player == 2) {
-            player2Life -= lives
-        }
-    }*/
-
-    //links the game status, such as if ended or not and win state
-    /*func linkStatusVariables(endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int) {
-        endPointer = .init(&endVar)
-        winPointer = .init(&winVar)
-        exP1LifePointer = .init(&p1Life)
-        exP2LifePointer = .init(&p2Life)
-    }*/
-    
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 
         time = timePointer.pointee
+        player1Life = p1LifePointer.pointee
+        player2Life = p2LifePointer.pointee
+        
         //every 30 executions, 1 second elapses
         if (count == 30) {
             count = 0
@@ -98,11 +78,11 @@ class StatusBar : RenderableEntity {
 
         timePointer.pointee = time
         
-        if (StatusBar.player1Life <= 0) {
+        if (player1Life <= 0) {
             end = true
             win = 2
         }
-        else if (StatusBar.player2Life <= 0) {
+        else if (player2Life <= 0) {
             end = true
             win = 1
         }
@@ -110,7 +90,7 @@ class StatusBar : RenderableEntity {
         if (!end) {
         //render banner text
         let fillStyle = FillStyle(color:Color(.white))
-        let words = Text(location:Point(x:25,y:50), text:"P1 Lives: \(StatusBar.player1Life)")
+        let words = Text(location:Point(x:25,y:50), text:"P1 Lives: \(player1Life)")
         words.font = "30pt Callout"
         canvas.render(fillStyle, words)
 
@@ -118,7 +98,7 @@ class StatusBar : RenderableEntity {
         wordsTime.font = "30pt Callout"
         canvas.render(wordsTime)
         
-        let words1 = Text(location:Point(x:canvasSize.center.x+400,y:50), text:"P2 Lives: \(StatusBar.player2Life)")
+        let words1 = Text(location:Point(x:canvasSize.center.x+400,y:50), text:"P2 Lives: \(player2Life)")
         words1.font = "30pt Callout"
         canvas.render(words1)
         }
