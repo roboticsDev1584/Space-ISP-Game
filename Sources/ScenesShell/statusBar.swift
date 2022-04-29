@@ -5,7 +5,7 @@ import Foundation
 class StatusBar : RenderableEntity {
     static var player1Life = 3
     static var player2Life = 3
-    var time : String
+    var time = "0:00"
     
     var count = 0
     var end = false

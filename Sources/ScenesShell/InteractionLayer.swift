@@ -22,7 +22,7 @@ class InteractionLayer : Layer, KeyDownHandler {
 
     let moveAmount = 3.0
     let turnAmount = 3.0
-    var timeAmount = "10:00"
+    var timeAmount = "5:00"
     var ship1Lives = 3
     var ship2Lives = 3
     var gameEnded = false
@@ -33,7 +33,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let saturnBackground = SaturnBackground()
     let backgroundChoice = ChooseMap()
     //conversion: 30 = 1 second
-    let starBackground = StarBackground(waitStar:90,changeStar:90,waitRedGiant:90,changeRedGiant:90,waitSupernova:60,enlargeBlackHole:90,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+    let starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
 
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
@@ -138,16 +138,27 @@ class InteractionLayer : Layer, KeyDownHandler {
             case "t" :
                 ship1Color = Color(.red)
                 insert(entity:player2, at:.inFrontOf(object:player1))
-                /*case "r" :
-                  ship1Color = Color(.yellow)
-                  insert(entity:player2, at:.inFrontof(object:player1))*/
+            case "v" :
+                ship1Color = Color(.yellow)
+                insert(entity:player2, at:.inFrontOf(object:player1))
             case "l" :
+                ship2Color = Color(.blue)
+                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+            case "g" :
+                ship2Color = Color(.green)
+                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+            case "h" :
+                ship2Color = Color(.red)
+                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+            case "k" :
+                ship2Color = Color(.yellow)
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
                 insert(entity:statusBar, at:.front)
             case "m" :
                 insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
+                timeAmount = "1:30"
                 insert(entity:statusBar, at:.front)
             case "f" :
                 insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
@@ -155,6 +166,7 @@ class InteractionLayer : Layer, KeyDownHandler {
             case "y" :
                 insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
                 starBackground.begin()
+                timeAmount = "1:00"
                 insert(entity:statusBar, at:.front)
             case "q" :
                 insert(entity:WinnerScreen, at:.inFrontOf(object:starBackground))
@@ -177,8 +189,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     }
     
     init() {
-        statusBar = StatusBar(time:timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
-        //statusBar.linkStatusVariables(endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
 

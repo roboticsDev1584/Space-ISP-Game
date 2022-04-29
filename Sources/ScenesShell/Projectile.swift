@@ -74,7 +74,7 @@ class Projectile : RenderableEntity {
         print(String(ship2XPointer.pointee)
         print(String(projectile.center.y))
         print(String(ship2YPointer.pointee)*/
-        if (projectile.center.x == ship1XPointer.pointee && projectile.center.y == ship1YPointer.pointee) {
+        /*if (projectile.center.x == ship1XPointer.pointee && projectile.center.y == ship1YPointer.pointee) {
             terminate = true
             //player 1 loses one life
             lives1 -= 1
@@ -87,14 +87,14 @@ class Projectile : RenderableEntity {
             lives2 -= 1
             print("hit!")
             print("lives2: " + String(lives2))
-        }
+        }*/
         //print("lives1: " + String(lives1))
         //print("lives2: " + String(lives2))
-
-        lives1Pointer.pointee = lives1
+        
+        /*lives1Pointer.pointee = lives1
         lives2Pointer.pointee = lives2
 
-        /*if (lives1Pointer.pointee != 3) {
+        if (lives1Pointer.pointee != 3) {
             print(lives1Pointer.pointee)
         }
         else if (lives2Pointer.pointee != 3) {
