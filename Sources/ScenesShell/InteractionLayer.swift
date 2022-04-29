@@ -82,8 +82,8 @@ class InteractionLayer : Layer, KeyDownHandler {
             prevShip1Key = "forwards"
             //print("end: " + String(gameEnded)) //just for now
             //print("win: " + String(gameWin)) //just for now
-            print("p1Lives: " + String(ship1Lives)) //just for now
-            print("p2Lives: " + String(ship2Lives)) //just for now
+            //print("p1Lives: " + String(ship1Lives)) //just for now
+            //print("p2Lives: " + String(ship2Lives)) //just for now
         case "s": //move ship1 backwards
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
