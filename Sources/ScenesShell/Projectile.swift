@@ -23,7 +23,7 @@ class Projectile : RenderableEntity {
     
     init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int) {        
         //initialize the projectile object
-        projectile = Ellipse(center:Point(x:x,y:y), radiusX:6, radiusY:6)
+        projectile = Ellipse(center:Point(x:x,y:y), radiusX:6, radiusY:6, fillMode:.fillAndStroke)
         projectileBody = FillStyle(color:shipColor)
         projectileOutline = StrokeStyle(color:Color(.gray))
 
