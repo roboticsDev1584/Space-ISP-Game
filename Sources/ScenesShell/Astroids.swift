@@ -31,16 +31,17 @@ class Asteroids: RenderableEntity {
         for x in 0 ..< points.count {
             let previousX = points[x].x
             let previousY = points[x].y
-            if centerX+200 >= previousX && centerX-200 <= previousX || centerY+250>=previousY && centerY-250<=previousY {
+            if centerX+120 >= previousX && centerX-120 <= previousX || centerY+120>=previousY && centerY-120<=previousY {
                 boundaries = false
             } 
         }
         return boundaries
     }
+    
     override func render(canvas:Canvas) {
         if boundaries(canvas:canvas) == true {            
             canvas.render(lineWidth, strokeStyle, fillStyle, ellipse)
-            
+            print("rendered")
         }
     }
 }

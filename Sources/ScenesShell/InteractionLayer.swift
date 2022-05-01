@@ -208,7 +208,7 @@ class InteractionLayer : Layer, KeyDownHandler {
         var centerX = 0
         var centerY = 0
         var radius = 0
-        let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
         for _ in 1 ... asteroidCount {
             while safe == false {
                 centerX = Int.random(in:120 ... canvasSize.width-120)
