@@ -37,7 +37,7 @@ class Ships: RenderableEntity {
           
         fillStyle = FillStyle(color:color)
         lines = Path(fillMode:.fillAndStroke)
-<<<<<<< HEAD
+
 
         if (rotation >= 0.0 && rotation <= 90.0) {
             //go to point a
