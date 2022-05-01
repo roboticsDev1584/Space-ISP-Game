@@ -4,6 +4,8 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
 
+    var asteroid : [Point] = []
+    var asteroidPoint = Point(x:0,y:0)
 
     var ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
     var ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
@@ -14,9 +16,12 @@ class InteractionLayer : Layer, KeyDownHandler {
     var ship1Y = 0
     var ship2Y = 0
     var ship1Rotate = 0.0
-    var ship2Rotate = 0.0
+    var ship2Rotate = 180.0
+    var ship1FireVelocity = 3.0
+    var ship2FireVelocity = 3.0
     var prevShip1Key = ""
     var prevShip2Key = ""
+    let moveAmount = 3.0
 
     let neptuneBackground = NeptuneBackground()
     let mercuryBackground = MercuryBackground()
@@ -28,6 +33,7 @@ class InteractionLayer : Layer, KeyDownHandler {
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
+    
     func updateShipPositions() {
         //update ship positions
         ship1.pointX = ship1X
@@ -37,64 +43,62 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship1.rotation = ship1Rotate
         ship2.rotation = ship2Rotate
     }
+    //update the ship1X and ship1Y values
+    func moveShip1(moveX:Double, moveY:Double) {
+        ship1X += Int(moveX * cos(ship1Rotate * Double.pi / 180.0))
+        ship1Y -= Int(moveY * sin(ship1Rotate * Double.pi / 180.0))
+    }
+    //update the ship2X and ship2Y values
+    func moveShip2(moveX:Double, moveY:Double) {
+        ship2X += Int(moveX * cos(ship2Rotate * Double.pi / 180.0))
+        ship2Y -= Int(moveY * sin(ship2Rotate * Double.pi / 180.0))
+    }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
-        case "8": //move ship2 up
-            ship2Y -= 3
-            prevShip2Key = "up"
-        case "5": //move ship2 down
-            ship2Y += 3
-            prevShip2Key = "down"
-        case "6": //move ship2 right
-            //ship2X += 3
+        case "8": //move ship2 forwards
+            moveShip2(moveX:moveAmount, moveY:moveAmount)
+            prevShip2Key = "forwards"
+        case "5": //move ship2 backwards
+            moveShip2(moveX:-moveAmount, moveY:-moveAmount)
+            prevShip2Key = "backwards"
+        case "6": //turn ship2 right
             ship2Rotate -= 1.0
             prevShip2Key = "right"
-        case "4": //move ship2 left
-            //ship2X -= 3
+        case "4": //turn ship2 left
             ship2Rotate += 1.0
             prevShip2Key = "left"
-        case "w": //move ship1 up
-            ship1Y -= 3
-            prevShip1Key = "up"
-        case "s": //move ship1 down
-            ship1Y += 3
-            prevShip1Key = "down"
-        case "d": //move ship1 right
-            //ship1X += 3
+        case "w": //move ship1 forwards
+            moveShip1(moveX:moveAmount, moveY:moveAmount)
+            prevShip1Key = "forwards"
+        case "s": //move ship1 backwards
+            moveShip1(moveX:-moveAmount, moveY:-moveAmount)
+            prevShip1Key = "backwards"
+        case "d": //turn ship1 right
             ship1Rotate -= 1.0
             prevShip1Key = "right"
-        case "a": //move ship1 left
-            //ship1X -= 3
+        case "a": //turn ship1 left
             ship1Rotate += 1.0
             prevShip1Key = "left"
         case "r": //shoot from ship
             let projectile : Projectile
             switch(prevShip1Key) {
-            case "up": //fire a projectile up
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:270, fireVelocity:3)
-            case "down": //fire a projectile down
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:90, fireVelocity:3)
-            case "right": //fire a projectile right
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:0, fireVelocity:3)
-            case "left": //fire a projectile left
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
+            case "forwards": //fire a projectile forwards
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
+            case "backwards": //fire a projectile backwards
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue))
             default:
-                projectile = Projectile(x:ship1X, y:ship1Y, degree:180, fireVelocity:3)
+                projectile = Projectile(x:ship1X, y:ship1Y, degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue))
             }
             insert(entity:projectile, at:.front)
         case "7": //shoot from ship2
             let projectile : Projectile
             switch(prevShip2Key) {
-            case "up": //fire a projectile up
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:270, fireVelocity:3)
-            case "down": //fire a projectile down
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:90, fireVelocity:3)
-            case "right": //fire a projectile right
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:0, fireVelocity:3)
-            case "left": //fire a projectile left
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:180, fireVelocity:3)
+            case "forwards": //fire a projectile forwards
+                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
+            case "backwards": //fire a projectile backwards
+                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen))
             default:
-                projectile = Projectile(x:ship2X, y:ship2Y, degree:180, fireVelocity:3)
+                projectile = Projectile(x:ship2X, y:ship2Y, degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen))
             }
             insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
@@ -145,7 +149,31 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
-        
+
+        let asteroidCount = Int.random(in:10 ... 15)
+        var safe = false
+        var centerX = 0
+        var centerY = 0
+        var radius = 0
+        let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        for _ in 1 ... asteroidCount {
+            while safe == false {
+                centerX = Int.random(in:120 ... canvasSize.width-120)
+                centerY = Int.random(in:120 ... canvasSize.height-120)
+                radius = Int.random(in:40 ... 100)
+                
+                if renderedAsteroid.boundaries(canvas:canvas) == true {
+                    asteroidPoint = Point(x:centerX,y:centerY)
+                    asteroid.append(asteroidPoint)  
+                    insert(entity:renderedAsteroid, at:.front)
+                    safe = true
+                }
+            }
+            
+            safe = false 
+            //have to add point to array
+            
+        }
         dispatcher.registerKeyDownHandler(handler: self)
     }
     override func postTeardown() {

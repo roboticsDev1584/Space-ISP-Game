@@ -31,9 +31,10 @@ class Ships: RenderableEntity {
     
     
     override func render(canvas:Canvas) {
-        //re-render the ship path
+        //recreate the ship object
         let r = 26.0
         lines = Path(fillMode:.fillAndStroke)
+
         if (rotation >= 0.0 && rotation <= 90.0) {
             //go to point a
             lines.moveTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
@@ -50,6 +51,7 @@ class Ships: RenderableEntity {
             //go to point a
             lines.moveTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
         }
+        
         if ((rotation+120.0) > 180.0 && (rotation+120.0) <= 270.0) {
             //go to point b
             lines.lineTo(Point(x:pointX+Int((r*cos((rotation+120.0)*(Double.pi / 180.0)))), y:pointY-Int((r*sin((rotation+120.0)*(Double.pi / 180.0))))))
@@ -98,7 +100,6 @@ class Ships: RenderableEntity {
             //go back to point a
             lines.lineTo(Point(x:pointX+Int((r*cos(rotation*(Double.pi / 180.0)))), y:pointY-Int((r*sin(rotation*(Double.pi / 180.0))))))
         }
-
         canvas.render(lineWidth, strokeStyle, fillStyle, lines)
 
         }
