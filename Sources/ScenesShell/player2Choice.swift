@@ -29,11 +29,11 @@ class Player2Choose : RenderableEntity {
         words.font = "80pt Callout"
         canvas.render(fillStyle, words)
 
-        let words1 = Text(location:Point(x:canvasSize.center.x-245,y:200), text:"Red (Press r)")
+        let words1 = Text(location:Point(x:canvasSize.center.x-245,y:200), text:"Red (Press h)")
         words1.font = "45pt Callout"
         canvas.render(words1)
 
-        let words2 = Text(location:Point(x:canvasSize.center.x-250, y:300), text:"Navy (Press n)")
+        let words2 = Text(location:Point(x:canvasSize.center.x-250, y:300), text:"Blue (Press l)")
         words2.font = "45pt Callout"
         canvas.render(words2)
 
@@ -41,7 +41,7 @@ class Player2Choose : RenderableEntity {
         words3.font = "45pt Callout"
         canvas.render(words3)
 
-        let words4 = Text(location:Point(x:canvasSize.center.x-265, y:500), text:"Yellow (Press y)")
+        let words4 = Text(location:Point(x:canvasSize.center.x-265, y:500), text:"Yellow (Press k)")
         words4.font = "45pt Callout"
         canvas.render(words4)
         }

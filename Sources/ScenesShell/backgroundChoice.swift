@@ -33,7 +33,7 @@ class ChooseMap : RenderableEntity {
         words1.font = "50pt Callout"
         canvas.render(words1)
 
-        let words2 = Text(location:Point(x:canvasSize.center.x-450, y:300), text:"Saturn: INSERT SPECIAL HERE (Press s)")
+        let words2 = Text(location:Point(x:canvasSize.center.x-450, y:300), text:"Saturn (Press f)")
         words2.font = "45pt Callout"
         canvas.render(words2)
 
@@ -45,7 +45,7 @@ class ChooseMap : RenderableEntity {
         words4.font = "45pt Callout"
         canvas.render(words4)
 
-        let words5 = Text(location:Point(x:30, y:600), text:"Star: After 30 seconds the star becomes a black hole and players must avoid getting sucked in (Press t)")
+        let words5 = Text(location:Point(x:30, y:600), text:"Star: Players must defeat each other before star fully turns into black hole (Press y)")
         words5.font = "34pt Callout"
         canvas.render(words5)
         }
