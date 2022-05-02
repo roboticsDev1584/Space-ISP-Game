@@ -145,6 +145,7 @@ class InteractionLayer : Layer, KeyDownHandler {
                 insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
             case "n" :
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
+                timeAmount = "2:00"
                 insert(entity:statusBar, at:.front)
             case "m" :
                 insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
@@ -152,14 +153,13 @@ class InteractionLayer : Layer, KeyDownHandler {
                 insert(entity:statusBar, at:.front)
             case "f" :
                 insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
+                timeAmount = "5:00"
                 insert(entity:statusBar, at:.front)
             case "y" :
                 insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
                 starBackground.begin()
                 timeAmount = "1:00"
                 insert(entity:statusBar, at:.front)
-            case "q" :
-                insert(entity:WinnerScreen, at:.inFrontOf(object:starBackground))
             default:
                 break
         }
@@ -198,8 +198,6 @@ class InteractionLayer : Layer, KeyDownHandler {
 
         dispatcher.registerKeyDownHandler(handler: self)
         
-        //just for now
-        insert(entity:statusBar, at:.front)
     }
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
