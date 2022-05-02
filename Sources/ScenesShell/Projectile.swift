@@ -81,6 +81,7 @@ class Projectile : RenderableEntity {
         else {
             canvas.render()
         }
+
     }
 
 }

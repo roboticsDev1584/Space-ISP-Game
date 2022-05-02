@@ -4,9 +4,15 @@ import Igis
 
 class InteractionLayer : Layer, KeyDownHandler {
 
+
+    var asteroid : [Point] = []
+    var asteroidPoint = Point(x:0,y:0)
+
     var ship1 : Ships
     var ship2 : Ships
+
     
+
     var ship1X = 0
     var ship2X = 0
     var ship1Y = 0
@@ -196,6 +202,31 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
 
+
+        let asteroidCount = Int.random(in:10 ... 15)
+        var safe = false
+        var centerX = 0
+        var centerY = 0
+        var radius = 0
+        var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        for _ in 1 ... asteroidCount {
+            while safe == false {
+                centerX = Int.random(in:120 ... canvasSize.width-120)
+                centerY = Int.random(in:120 ... canvasSize.height-120)
+                radius = Int.random(in:40 ... 100)
+                
+                if renderedAsteroid.boundaries(canvas:canvas) == true {
+                    asteroidPoint = Point(x:centerX,y:centerY)
+                    asteroid.append(asteroidPoint)  
+                    insert(entity:renderedAsteroid, at:.front)
+                    safe = true
+                }
+            }
+            
+            safe = false 
+            //have to add point to array
+            
+        }
         dispatcher.registerKeyDownHandler(handler: self)
         
     }
