@@ -9,22 +9,27 @@ import Foundation
 class ChooseMap : RenderableEntity {
 //    var fillStyle : FillStyle
 //    let canvas : Canvas
+    let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging
+        guard let backgroundURL = URL(string:"https://images.theconversation.com/files/391059/original/file-20210323-23-pvr9g2.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop") else {
+            fatalError("failed to load backgroundURL")
+        }
+        background = Image(sourceURL:backgroundURL)
         super.init(name:"ChooseMap")
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        canvas.setup(background)
     }
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 
-        let rect = Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x * 2, height:canvasSize.center.y * 2))
-        let thing = Rectangle(rect:rect)
-        let rectFillStyle = FillStyle(color:Color(.black))
-        canvas.render(rectFillStyle, thing)
-        
-        let fillStyle = FillStyle(color:Color(.white))
+        if background.isReady {
+            background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
+            canvas.render(background)
+        }
+        let fillStyle = FillStyle(color:Color(.deepskyblue))
         let words = Text(location:Point(x:canvasSize.center.x-330,y:100), text:"Choose your setting")
         words.font = "80pt Callout"
         canvas.render(fillStyle, words)

@@ -8,8 +8,6 @@ class StarBackground : RenderableEntity {
     let redGiant : Image
     let supernova : Image
     let blackHole : Image
-
-    let audio : Audio
     
     let starHeightPercent = 50.0
     let starWidthPercent = 90.0
@@ -101,14 +99,6 @@ class StarBackground : RenderableEntity {
         supernova = Image(sourceURL:supernovaURL)
         blackHole = Image(sourceURL:blackHoleURL)
 
-        //form the audio url
-        guard let audioURL = URL(string:"https://roboticsdev1584.github.io/Filament-Dashboard/Assets/Anthem_of_the_Masses.mp3") else {
-            fatalError("Failed to create audio URL")
-        }
-        
-        //play some audio for effect
-        audio = Audio(sourceURL:audioURL, shouldLoop:true)
-        
         super.init(name:"StarBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
@@ -117,8 +107,7 @@ class StarBackground : RenderableEntity {
         canvas.setup(redGiant)
         canvas.setup(supernova)
         canvas.setup(blackHole)
-        canvas.setup(audio)
-
+    
         canvasSizeC = canvasSize
     }
     override func render(canvas:Canvas) {
@@ -183,9 +172,6 @@ class StarBackground : RenderableEntity {
             renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:blackHole, planetHeight:blackHoleHeightPercent, planetWidth:blackHoleWidthPercent, multiplier:transitionScale)
         default:
             break
-        }
-        if (audio.isReady) {
-            canvas.render(audio)
         }
     }
 }

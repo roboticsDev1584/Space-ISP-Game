@@ -9,22 +9,28 @@ import Foundation
 class instructions : RenderableEntity {
 //    var fillStyle : FillStyle
 //    let canvas : Canvas
+    let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging
+        guard let backgroundURL = URL(string:"https://images.unsplash.com/photo-1465101162946-4377e57745c3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c3BhY2UlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fA%3D%3D&w=1000&q=80") else {
+            fatalError("failed to load backgroundURL")
+        }
+        background = Image(sourceURL:backgroundURL)
         super.init(name:"instructions")
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        canvas.setup(background)
     }
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 
-        let rect = Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x * 2, height:canvasSize.center.y * 2))
-        let thing = Rectangle(rect:rect)
-        let rectFillStyle = FillStyle(color:Color(.black))
-        canvas.render(rectFillStyle, thing)
+        if background.isReady {
+            background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
+            canvas.render(background)
+        }
         
-        let fillStyle = FillStyle(color:Color(.white))
+        let fillStyle = FillStyle(color:Color(.ivory))
         let words = Text(location:Point(x:canvasSize.center.x-300,y:100), text:"How to play")
         words.font = "80pt Callout"
         canvas.render(fillStyle, words)
