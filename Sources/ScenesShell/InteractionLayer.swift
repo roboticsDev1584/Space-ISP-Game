@@ -208,21 +208,23 @@ class InteractionLayer : Layer, KeyDownHandler {
         var centerX = 0
         var centerY = 0
         var radius = 0
-        var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
         for _ in 1 ... asteroidCount {
             while safe == false {
                 centerX = Int.random(in:120 ... canvasSize.width-120)
                 centerY = Int.random(in:120 ... canvasSize.height-120)
+                asteroid.append(asteroidPoint)
                 radius = Int.random(in:40 ... 100)
-                
                 if renderedAsteroid.boundaries(canvas:canvas) == true {
                     asteroidPoint = Point(x:centerX,y:centerY)
-                    asteroid.append(asteroidPoint)  
                     insert(entity:renderedAsteroid, at:.front)
+                    print("rendered")
                     safe = true
                 }
+                else {
+                    asteroid.remove(at:0)
+                }
             }
-            
             safe = false 
             //have to add point to array
             

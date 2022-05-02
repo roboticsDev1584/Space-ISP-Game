@@ -41,7 +41,7 @@ class Asteroids: RenderableEntity {
     override func render(canvas:Canvas) {
         if boundaries(canvas:canvas) == true {            
             canvas.render(lineWidth, strokeStyle, fillStyle, ellipse)
-            print("rendered")
+            
         }
     }
 }
