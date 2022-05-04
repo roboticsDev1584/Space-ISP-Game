@@ -203,11 +203,11 @@ class InteractionLayer : Layer, KeyDownHandler {
         updateShipPositions()
 
 
-        let asteroidCount = Int.random(in:10 ... 15)
-        var safe = false
-        var centerX = 0
-        var centerY = 0
-        var radius = 0
+        /*Let Asteroidcount = Int.Random(In:10 ... 15)
+        Var Safe = False
+        Var Centerx = 0
+        Var Centery = 0
+        Var Radius = 0
         let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
         for _ in 1 ... asteroidCount {
             while safe == false {
@@ -216,7 +216,7 @@ class InteractionLayer : Layer, KeyDownHandler {
                 asteroid.append(asteroidPoint)
                 radius = Int.random(in:40 ... 100)
                 if renderedAsteroid.boundaries(canvas:canvas) == true {
-                    asteroidPoint = Point(x:centerX,y:centerY)
+v                    asteroidPoint = Point(x:centerX,y:centerY)
                     insert(entity:renderedAsteroid, at:.front)
                     print("rendered")
                     safe = true
@@ -228,7 +228,7 @@ class InteractionLayer : Layer, KeyDownHandler {
             safe = false 
             //have to add point to array
             
-        }
+        }*/
         dispatcher.registerKeyDownHandler(handler: self)
         
     }
