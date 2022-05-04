@@ -7,7 +7,8 @@ class InteractionLayer : Layer, KeyDownHandler {
 
     var asteroid : [Point] = []
     var asteroidPoint = Point(x:0,y:0)
-
+    var canvasSize = Size(width:0,height:0)
+    
     var ship1 : Ships
     var ship2 : Ships
 
@@ -58,6 +59,30 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2.rotation = ship2Rotate
         ship1.color = ship1Color
         ship2.color = ship2Color
+    }
+
+    func importAsteroids() {
+        let asteroidCount = Int.random(in:10 ... 15)
+        var safe = false
+        var centerX = 0
+        var centerY = 0
+        var radius = 0
+        var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        for _ in 1 ... asteroidCount {
+            while safe == false {
+                centerX = Int.random(in:120 ... canvasSize.width-120)
+                centerY = Int.random(in:120 ... canvasSize.height-120)
+                radius = Int.random(in:40 ... 100)
+                renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+                if renderedAsteroid.boundaries() == true {
+                    asteroidPoint = Point(x:centerX,y:centerY)
+                    asteroid.append(asteroidPoint)
+                    insert(entity:renderedAsteroid, at:.front)
+                    safe = true
+                }
+            }
+            safe = false
+        }
     }
     //update the ship1X and ship1Y values
     func moveShip1(moveX:Double, moveY:Double) {
@@ -153,19 +178,23 @@ class InteractionLayer : Layer, KeyDownHandler {
                 insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
                 timeAmount = "2:00"
                 insert(entity:statusBar, at:.front)
+                importAsteroids()
             case "m" :
                 insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
                 timeAmount = "1:30"
                 insert(entity:statusBar, at:.front)
+                importAsteroids()
             case "f" :
                 insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
                 timeAmount = "5:00"
                 insert(entity:statusBar, at:.front)
+                importAsteroids()
             case "y" :
                 insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
                 starBackground.begin()
                 timeAmount = "1:00"
                 insert(entity:statusBar, at:.front)
+                importAsteroids()
             default:
                 break
         }
@@ -201,34 +230,7 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
-
-
-        let asteroidCount = Int.random(in:10 ... 15)
-        var safe = false
-        var centerX = 0
-        var centerY = 0
-        var radius = 0
-        let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
-        for _ in 1 ... asteroidCount {
-            while safe == false {
-                centerX = Int.random(in:120 ... canvasSize.width-120)
-                centerY = Int.random(in:120 ... canvasSize.height-120)
-                asteroid.append(asteroidPoint)
-                radius = Int.random(in:40 ... 100)
-                if renderedAsteroid.boundaries(canvas:canvas) == true {
-                    asteroidPoint = Point(x:centerX,y:centerY)
-                    insert(entity:renderedAsteroid, at:.front)
-                    print("rendered")
-                    safe = true
-                }
-                else {
-                    asteroid.remove(at:0)
-                }
-            }
-            safe = false 
-            //have to add point to array
-            
-        }
+        self.canvasSize = canvasSize
         dispatcher.registerKeyDownHandler(handler: self)
         
     }

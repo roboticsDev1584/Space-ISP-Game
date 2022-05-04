@@ -26,12 +26,12 @@ class Asteroids: RenderableEntity {
         super.init(name:"Asteroids")
     }
 
-    func boundaries(canvas:Canvas) -> Bool {
+    func boundaries() -> Bool {
         var boundaries = true
         for x in 0 ..< points.count {
             let previousX = points[x].x
             let previousY = points[x].y
-            if centerX+120 >= previousX && centerX-120 <= previousX || centerY+120>=previousY && centerY-120<=previousY {
+            if (centerX+(radius+10) >= previousX-100 && centerX-(radius+10) <= previousX+100) && (centerY+(radius+10)>=previousY-100 && centerY-(radius+10)<=previousY+100) {
                 boundaries = false
             } 
         }
@@ -39,7 +39,7 @@ class Asteroids: RenderableEntity {
     }
     
     override func render(canvas:Canvas) {
-        if boundaries(canvas:canvas) == true {            
+        if boundaries() == true {            
             canvas.render(lineWidth, strokeStyle, fillStyle, ellipse)
             
         }
