@@ -3,6 +3,16 @@ import Scenes
 import Igis
 
 class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandler {
+    
+    var hasRendered = false
+
+    var hasColored = false
+    var red = false
+    var green = false
+    var yellow = false
+    var blue = false 
+    var warning = Warning()
+    
     var asteroid : [Point] = []
     var asteroidRects : [Rect] = []
     var asteroidPoint = Point(x:0,y:0)
@@ -58,6 +68,18 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.color = ship2Color
     }
 
+    func hasColor(Colored:Bool) {
+        if Colored == true  {
+            red = true
+            yellow = true
+            green = true
+            blue = true
+            hasColored = true
+        }
+        
+    }
+        
+
     func importAsteroids() {
         let asteroidCount = Int.random(in:10 ... 15)
         var safe = false
@@ -67,8 +89,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
         for _ in 1 ... asteroidCount {
             while safe == false {
-                centerX = Int.random(in:120 ... canvasSize.width-120)
-                centerY = Int.random(in:120 ... canvasSize.height-120)
+                centerX = Int.random(in:220 ... canvasSize.width-220)
+                centerY = Int.random(in:220 ... canvasSize.height-220)
                 radius = Int.random(in:40 ... 100)
                 renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
                 if renderedAsteroid.boundaries() == true {
@@ -152,52 +174,113 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             case "Enter" :
                 insert(entity:Instructions, at:.back)
             case "e" :
+                insert(entity:ship1, at:.front)
                 insert(entity:player1, at:.inFrontOf(object:Instructions))
+                insert(entity:ship2, at:.front)
             case "o" :
-                ship1Color = Color(.blue)
-                insert(entity:player2, at:.inFrontOf(object:player1))
+                if hasColored == false {
+                    ship1Color = Color(.blue)
+                    blue = true
+                    insert(entity:player2, at:.inFrontOf(object:player1))
+                }
             case "u" :
-                ship1Color = Color(.green)
-                insert(entity:player2, at:.inFrontOf(object:player1))
+                if hasColored == false {
+                    ship1Color = Color(.green)
+                    green = true
+                    insert(entity:player2, at:.inFrontOf(object:player1))
+                }
             case "t" :
-                ship1Color = Color(.red)
-                insert(entity:player2, at:.inFrontOf(object:player1))
+                if hasColored == false {
+                    ship1Color = Color(.red)
+                    red = true
+                    insert(entity:player2, at:.inFrontOf(object:player1))
+                }
             case "v" :
-                ship1Color = Color(.yellow)
-                insert(entity:player2, at:.inFrontOf(object:player1))
+                if hasColored == false { 
+                    ship1Color = Color(.yellow)
+                    yellow = true
+                    insert(entity:player2, at:.inFrontOf(object:player1))
+                }
             case "l" :
-                ship2Color = Color(.blue)
-                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                if blue == false {
+                    ship2Color = Color(.blue)
+                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                    warning.terminate = true
+                    hasColor(Colored:true) 
+                } else {
+                    if hasColored == false {
+                        insert(entity:warning, at:.front)
+                    }
+                }
             case "g" :
-                ship2Color = Color(.green)
-                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                if green == false {
+                    ship2Color = Color(.green)
+                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                    warning.terminate = true
+                    hasColor(Colored:true) 
+                } else  {
+                    if hasColored == false {
+                        insert(entity:warning, at:.front)
+                    }
+                }
+                
             case "h" :
-                ship2Color = Color(.red)
-                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                if red == false {
+                    ship2Color = Color(.red)
+                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                    warning.terminate = true
+                    hasColor(Colored:true) 
+                } else {
+                    if hasColored == false {
+                        insert(entity:warning, at:.front)
+                    }
+                }
+                    
             case "k" :
-                ship2Color = Color(.yellow)
-                insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                if yellow == false {
+                    ship2Color = Color(.yellow)
+                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
+                    warning.terminate = true
+                    hasColor(Colored:true) 
+                } else {
+                    if hasColored == false {
+                        insert(entity:warning, at:.front)
+                    }
+                }
+                
             case "n" :
-                insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
-                timeAmount = "2:00"
-                insert(entity:statusBar, at:.front)
-                importAsteroids()
+                if hasRendered == false {
+                    insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
+                    timeAmount = "2:00"
+                    insert(entity:statusBar, at:.front)
+                    importAsteroids()
+                    hasRendered = true
+                }
             case "m" :
-                insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
-                timeAmount = "1:30"
-                insert(entity:statusBar, at:.front)
-                importAsteroids()
+                if hasRendered == false {
+                    insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
+                    timeAmount = "1:30"
+                    insert(entity:statusBar, at:.front)
+                    importAsteroids()
+                    hasRendered = true 
+                }
             case "f" :
-                insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
-                timeAmount = "5:00"
-                insert(entity:statusBar, at:.front)
-                importAsteroids()
+                if hasRendered == false {
+                    insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
+                    timeAmount = "5:00"
+                    insert(entity:statusBar, at:.front)
+                    importAsteroids()
+                    hasRendered = true 
+                }
             case "y" :
-                insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
-                starBackground.begin()
-                timeAmount = "1:00"
-                insert(entity:statusBar, at:.front)
-                importAsteroids()
+                if hasRendered == false {
+                    insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
+                    starBackground.begin()
+                    timeAmount = "1:00"
+                    insert(entity:statusBar, at:.front)
+                    importAsteroids()
+                    hasRendered = true 
+                }
             default:
                 break
         }
@@ -223,8 +306,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
 
         super.init(name:"Interaction")
         
-        insert(entity:ship1, at:.front)
-        insert(entity:ship2, at:.front)
+//        insert(entity:ship1, at:.front)
+//        insert(entity:ship2, at:.front)
     }
     override func preSetup(canvasSize:Size, canvas:Canvas) {        
         //move ships to starting positions
