@@ -75,23 +75,24 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             green = true
             blue = true
             hasColored = true
-        }
-        
+        }        
     }
         
     func importAsteroids() {
-        let asteroidCount = Int.random(in:10 ... 15)
+        //cannot be too high of an asteroid count or it takes too long to find a safe place to render more asteroids
+        let asteroidCount = Int.random(in:2 ... 4)
         var safe = false
         var centerX = 0
         var centerY = 0
         var radius = 0
-        var renderedAsteroid : Asteroids
+        //var renderedAsteroid : Asteroids
         for _ in 1 ... asteroidCount {
+            safe = false
             while safe == false {
                 centerX = Int.random(in:220 ... canvasSize.width-220)
                 centerY = Int.random(in:220 ... canvasSize.height-220)
                 radius = Int.random(in:40 ... 100)
-                renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+                let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
                 if renderedAsteroid.boundaries() == true {
                     asteroidPoint = Point(x:centerX,y:centerY)
                     asteroid.append(asteroidPoint)

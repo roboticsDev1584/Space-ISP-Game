@@ -16,6 +16,7 @@ class Projectile : RenderableEntity {
     var terminate : Bool
     var lives1 = 0
     var lives2 = 0
+    let radius = 6
 
     var ship1XPointer : UnsafeMutablePointer<Int>
     var ship2XPointer : UnsafeMutablePointer<Int>
@@ -26,7 +27,7 @@ class Projectile : RenderableEntity {
     
     init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int, rects:[Rect]) {        
         //initialize the projectile object
-        projectile = Ellipse(center:Point(x:x,y:y), radiusX:6, radiusY:6, fillMode:.fillAndStroke)
+        projectile = Ellipse(center:Point(x:x,y:y), radiusX:radius, radiusY:radius, fillMode:.fillAndStroke)
         projectileBody = FillStyle(color:shipColor)
         projectileOutline = StrokeStyle(color:Color(.gray))
 
@@ -79,7 +80,7 @@ class Projectile : RenderableEntity {
         lives2Pointer.pointee = lives2
 
         //use containment to know when the projectile needs to change direction
-        let projectileRect = Rect(topLeft:Point(x:projectile.center.x-6, y:projectile.center.y-6), size:Size(width:12, height:12))
+        let projectileRect = Rect(topLeft:Point(x:projectile.center.x-radius, y:projectile.center.y-radius), size:Size(width:radius*2, height:radius*2))
         let canvasSize = canvas.canvasSize!
         let canvasRect = Rect(size:canvasSize)
         let canvasContain = canvasRect.containment(target:projectileRect)
@@ -101,15 +102,17 @@ class Projectile : RenderableEntity {
         //handle projectile direction change
         for index in 0 ..< asteroidRects.count {
             let asteroid = asteroidRects[index]
+            /*
             let rectangle = Rectangle(rect:asteroid, fillMode:.fillAndStroke)
             let stroke = StrokeStyle(color:Color(.white))
-            canvas.render(stroke, rectangle)
+            canvas.render(stroke, rectangle)*/
+            let projectileRectangle = Rectangle(rect:projectileRect, fillMode:.fillAndStroke)
             let containment = asteroid.containment(target:projectileRect)
-            //change direction if going to hit an asteroid
-            if ((!containment.intersection([.overlapsRight, .beyondRight]).isEmpty && (fireVelocityX > 0)) || (!containment.intersection([.overlapsLeft, .beyondLeft]).isEmpty && (fireVelocityX < 0))) {
+            //change direction if hitting an asteroid
+            if (!containment.intersection([.containedHorizontally]).isEmpty) {
                 fireVelocityXSign *= -1
             }
-            if ((!containment.intersection([.overlapsTop, .beyondTop]).isEmpty && (fireVelocityY < 0)) || (!containment.intersection([.overlapsBottom, .beyondBottom]).isEmpty && (fireVelocityY > 0))) {
+            if (!containment.intersection([.containedVertically]).isEmpty) {
                 fireVelocityYSign *= -1
             }
         }
