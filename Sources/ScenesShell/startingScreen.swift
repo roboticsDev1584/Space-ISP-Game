@@ -9,8 +9,7 @@ import Foundation
 class StartingScreen : RenderableEntity {
     var text : Text
     let background : Image
-//    var fillStyle : FillStyle
-//    let canvas : Canvas
+
     init() {
         // Using a meaningful name can be helpful for debugging
         text = Text(location:Point(x:0, y:300), text:"Hello, World!")
@@ -22,6 +21,11 @@ class StartingScreen : RenderableEntity {
         super.init(name:"StartingScreen")
     }
 
+    //function to center text based on font size that changes based on screen size (% font size)
+    func centerText (fontSizePercent:Int, fontColor:Color, text:String, canvas:Canvas, canvasSize:Size) {
+        
+    }
+    
     override func setup(canvasSize:Size,canvas:Canvas) {
         canvas.setup(background)
     }

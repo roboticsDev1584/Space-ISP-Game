@@ -2,8 +2,8 @@ import Foundation
 import Scenes
 import Igis
 
-class InteractionLayer : Layer, KeyDownHandler {
-
+class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandler {
+    
     var hasRendered = false
 
     var hasColored = false
@@ -19,8 +19,6 @@ class InteractionLayer : Layer, KeyDownHandler {
     
     var ship1 : Ships
     var ship2 : Ships
-    
-    
 
     var ship1X = 0
     var ship2X = 0
@@ -114,20 +112,37 @@ class InteractionLayer : Layer, KeyDownHandler {
         ship2X += Int(moveX * cos(ship2Rotate * Double.pi / 180.0))
         ship2Y -= Int(moveY * sin(ship2Rotate * Double.pi / 180.0))
     }
+    func onMouseMove(globalLocation:Point, movement:Point) {
+        let xDif = globalLocation.x - ship2X
+        let yDif = -(globalLocation.y - ship2Y)
+        //find the correct angle to turn ship to
+        var turnAngle = atan((Double(yDif) / Double(xDif))) * (180.0 / Double.pi)
+        if (xDif < 0) {
+            turnAngle += 180.0
+        }
+        else if (xDif > 0) {
+            turnAngle += 360.0
+        }
+        else {
+            turnAngle = (yDif < 0) ? (turnAngle + 360.0) : turnAngle
+        }
+        if (turnAngle >= 360.0) {
+            turnAngle -= 360.0
+        }
+        ship2Rotate = turnAngle
+        //move the ship to mouse position if far enough from center of ship
+        if ((xDif > 20 || xDif < -20) || (yDif > 20 || yDif < -20)) {
+            moveShip2(moveX:moveAmount, moveY:moveAmount)
+        }
+        //update ship positions
+        updateShipPositions()
+    }
+    func onMouseDown(globalLocation:Point) {
+        let projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+        insert(entity:projectile, at:.front)
+    }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
-        case "8": //move ship2 forwards
-            moveShip2(moveX:moveAmount, moveY:moveAmount)
-            prevShip2Key = "forwards"
-        case "5": //move ship2 backwards
-            moveShip2(moveX:-moveAmount, moveY:-moveAmount)
-            prevShip2Key = "backwards"
-        case "6": //turn ship2 right
-            ship2Rotate -= turnAmount
-            prevShip2Key = "right"
-        case "4": //turn ship2 left
-            ship2Rotate += turnAmount
-            prevShip2Key = "left"
         case "w": //move ship1 forwards
             moveShip1(moveX:moveAmount, moveY:moveAmount)
             prevShip1Key = "forwards"
@@ -152,19 +167,6 @@ class InteractionLayer : Layer, KeyDownHandler {
                 let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
                 insert(entity:projectile, at:.front)
             }
-        case "7": //shoot from ship2
-            var projectile : Projectile
-            switch(prevShip2Key) {
-            case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            default:
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            }
-            //link the projectile pointers
-            //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            insert(entity:projectile, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
                 insert(entity:Instructions, at:.back)
@@ -313,10 +315,13 @@ class InteractionLayer : Layer, KeyDownHandler {
         updateShipPositions()
         self.canvasSize = canvasSize
         dispatcher.registerKeyDownHandler(handler: self)
-        
+        dispatcher.registerMouseMoveHandler(handler: self)
+        dispatcher.registerMouseDownHandler(handler:self)
     }
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
+        dispatcher.unregisterMouseMoveHandler(handler: self)
+        dispatcher.unregisterMouseDownHandler(handler:self)
     }
     
 }
