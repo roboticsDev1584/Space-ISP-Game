@@ -85,7 +85,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         var centerX = 0
         var centerY = 0
         var radius = 0
-        var renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
+        var renderedAsteroid : Asteroids
         for _ in 1 ... asteroidCount {
             while safe == false {
                 centerX = Int.random(in:220 ... canvasSize.width-220)
@@ -101,7 +101,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                     safe = true
                 }
             }
-            safe = false
         }
     }
     //update the ship1X and ship1Y values
