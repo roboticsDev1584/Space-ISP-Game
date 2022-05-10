@@ -79,7 +79,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         
     }
         
-
     func importAsteroids() {
         let asteroidCount = Int.random(in:10 ... 15)
         var safe = false
