@@ -52,9 +52,9 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
-    let WinnerScreen = winnerScreen()
     let Instructions = instructions()
     var statusBar : StatusBar
+    var winnerScreen : WinnerScreen
 
     func updateShipPositions() {
         //update ship positions
@@ -142,6 +142,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     func onMouseDown(globalLocation:Point) {
         let projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
         insert(entity:projectile, at:.front)
+        insert(entity:winnerScreen, at:.front)
     }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
@@ -169,6 +170,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
                 insert(entity:projectile, at:.front)
             }
+            insert(entity:winnerScreen, at:.front)
             insert(entity:startingScreen, at:.back)
             case "Enter" :
                 insert(entity:Instructions, at:.back)
@@ -302,11 +304,9 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
+        winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
 
         super.init(name:"Interaction")
-        
-//        insert(entity:ship1, at:.front)
-//        insert(entity:ship2, at:.front)
     }
     override func preSetup(canvasSize:Size, canvas:Canvas) {        
         //move ships to starting positions
@@ -316,6 +316,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
         self.canvasSize = canvasSize
+        insert(entity:winnerScreen, at:.front)
+        
         dispatcher.registerKeyDownHandler(handler: self)
         dispatcher.registerMouseMoveHandler(handler: self)
         dispatcher.registerMouseDownHandler(handler:self)

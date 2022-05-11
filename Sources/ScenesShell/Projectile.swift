@@ -19,6 +19,7 @@ class Projectile : RenderableEntity {
     var lives2 = 0
     let radius = 6
     var inAstr = false
+    var bounceCount = 0
 
     var ship1XPointer : UnsafeMutablePointer<Int>
     var ship2XPointer : UnsafeMutablePointer<Int>
@@ -114,9 +115,11 @@ class Projectile : RenderableEntity {
             if (!astrContainment.intersection([.containedFully]).isEmpty) {        
                 if ((sideState == 1) || (sideState == 3)) {
                     fireVelocityXSign *= -1
+                    bounceCount += 1
                 }
                 if ((sideState == 2) || (sideState == 3)) {
                     fireVelocityYSign *= -1
+                    bounceCount += 1
                 }
                 if (sideState == 0) { //the projectile was fired into the center of the asteroid
                     terminate = true
@@ -143,6 +146,9 @@ class Projectile : RenderableEntity {
             }
         }
         asteroidRectsSides = tempAsteroidRectsSides
+        if (bounceCount == 3) {
+            terminate = true
+        }
         
         if (!terminate) {
             canvas.render(projectileBody, projectileOutline, projectile)
