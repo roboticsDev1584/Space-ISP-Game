@@ -27,6 +27,10 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var ship2Y = 0
     var ship1Rotate = 0.0
     var ship2Rotate = 180.0
+    var ship1FSafe = true
+    var ship2FSafe = true
+    var ship1BSafe = true
+    var ship2BSafe = true
     var ship1FireVelocity = 6.0
     var ship2FireVelocity = 6.0
     var ship1Color = Color(.white)
@@ -104,15 +108,64 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
         }
     }
+    //checks to see if the ship is running into an asteroid, direction 0 is forward, direction 1 is backward
+    func checkBoundaries(player:Int, direction:Int) -> Bool {
+        var safe = true
+        let shipSize : Int
+        var shipCenter : Point
+        switch (player) {
+        case 1:
+            shipCenter = Point(x:ship1X, y:ship1Y)
+        default:
+            shipCenter = Point(x:ship2X, y:ship2Y)
+        }
+        switch (direction) {
+        case 0:
+            shipSize = 40 //account for the front turret if fowards
+        default:
+            shipSize = 26 //otherwise just account for normal ship radius
+        }
+        for index in 0 ..< asteroid.count {
+            let radius = (asteroidRects[index].size.width / 2)
+            let center = asteroid[index]
+            //the ship is not safe if it touches an asteroid
+            if (((shipCenter.x - shipSize) <= (center.x + radius)) || ((shipCenter.x + shipSize) >= (center.x - radius)) || ((shipCenter.y - shipSize) <= (center.y + radius)) || ((shipCenter.y + shipSize) >= (center.y - radius))) {
+                safe = false
+            }
+        }
+        return safe
+    }
     //update the ship1X and ship1Y values
     func moveShip1(moveX:Double, moveY:Double) {
-        ship1X += Int(moveX * cos(ship1Rotate * Double.pi / 180.0))
-        ship1Y -= Int(moveY * sin(ship1Rotate * Double.pi / 180.0))
+        //only proceed forwards if safe to do so
+        /*if ((moveX > 0 && moveY > 0) && ship1FSafe) {*/
+            ship1X += Int(moveX * cos(ship1Rotate * Double.pi / 180.0))
+            ship1Y -= Int(moveY * sin(ship1Rotate * Double.pi / 180.0))
+            ship1FSafe = checkBoundaries(player:1, direction:0)
+        /*}
+        //only proceed backwards if safe to do so
+        else if ((moveX < 0 && moveY < 0) && ship1BSafe) {
+            ship1X += Int(moveX * cos(ship1Rotate * Double.pi / 180.0))
+            ship1Y -= Int(moveY * sin(ship1Rotate * Double.pi / 180.0))
+            ship1BSafe = checkBoundaries(player:1, direction:1)
+            }*/
+            print(ship1FSafe)
     }
     //update the ship2X and ship2Y values
     func moveShip2(moveX:Double, moveY:Double) {
-        ship2X += Int(moveX * cos(ship2Rotate * Double.pi / 180.0))
-        ship2Y -= Int(moveY * sin(ship2Rotate * Double.pi / 180.0))
+        /*//only proceed forwards if safe to do so
+        if ((moveX > 0 && moveY > 0) && ship2FSafe) {*/
+            ship2X += Int(moveX * cos(ship2Rotate * Double.pi / 180.0))
+            ship2Y -= Int(moveY * sin(ship2Rotate * Double.pi / 180.0))
+            /*ship2FSafe = checkBoundaries(player:2, direction:0)
+        }
+        //only proceed backwards if safe to do so
+        else if ((moveX < 0 && moveY < 0) && ship2BSafe) {
+            ship2X += Int(moveX * cos(ship2Rotate * Double.pi / 180.0))
+            ship2Y -= Int(moveY * sin(ship2Rotate * Double.pi / 180.0))
+            ship2BSafe = checkBoundaries(player:2, direction:1)
+            }*/
+            print(ship2FSafe)
     }
     func onMouseMove(globalLocation:Point, movement:Point) {
         let xDif = globalLocation.x - ship2X
