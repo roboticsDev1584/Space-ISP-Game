@@ -8,8 +8,7 @@ class Ships: RenderableEntity {
     let strokeStyle : StrokeStyle
     var fillStyle : FillStyle
     var lines : Path
-
-
+    
     var pointX : Int
     var pointY : Int
     var rotation : Double

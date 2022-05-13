@@ -10,6 +10,8 @@ class ChooseMap : RenderableEntity {
 //    var fillStyle : FillStyle
 //    let canvas : Canvas
     let background : Image
+    var warning = Warning()
+    
     init() {
         // Using a meaningful name can be helpful for debugging
         guard let backgroundURL = URL(string:"https://images.theconversation.com/files/391059/original/file-20210323-23-pvr9g2.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop") else {
@@ -21,10 +23,13 @@ class ChooseMap : RenderableEntity {
     
     override func setup(canvasSize:Size,canvas:Canvas) {
         canvas.setup(background)
+        warning.terminate = true
+        
     }
+    
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
-
+        
         if background.isReady {
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
@@ -52,6 +57,6 @@ class ChooseMap : RenderableEntity {
 
         let words5 = Text(location:Point(x:30, y:600), text:"Star: Players must defeat each other before star fully turns into black hole (Press y)")
         words5.font = "45pt Callout"
-        canvas.render(words5)
+        let fillStyle = FillStyle(color:Color(red:3, green:244, blue:252))
         }
 }
