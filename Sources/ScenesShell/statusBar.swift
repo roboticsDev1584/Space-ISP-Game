@@ -89,7 +89,7 @@ class StatusBar : RenderableEntity {
         wordsTime.font = "30pt Callout"
         canvas.render(wordsTime)
         
-        let words1 = Text(location:Point(x:canvasSize.center.x+400,y:50), text:"P2 Lives: \(player2Life)")
+        let words1 = Text(location:Point(x:canvasSize.width-225,y:50), text:"P2 Lives: \(player2Life)")
         words1.font = "30pt Callout"
         canvas.render(words1)
         }

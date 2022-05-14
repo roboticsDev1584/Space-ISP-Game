@@ -9,6 +9,8 @@ class StartingScreen : RenderableEntity {
 
     var p1LifePointer : UnsafeMutablePointer<Int>
     var p2LifePointer : UnsafeMutablePointer<Int>
+
+    var ratio : Double
     
     init(p1Life:inout Int, p2Life:inout Int) {
         // Using a meaningful name can be helpful for debugging
@@ -20,6 +22,7 @@ class StartingScreen : RenderableEntity {
         p1LifePointer = .init(&p1Life)
         p2LifePointer = .init(&p2Life)
         print("re-init")
+        self.ratio = 0
         
         super.init(name:"StartingScreen")
     }
@@ -31,6 +34,8 @@ class StartingScreen : RenderableEntity {
     
     override func setup(canvasSize:Size,canvas:Canvas) {
         //render background
+        ratio = (80.0/Double(canvasSize.width)) 
+        print(ratio)
         canvas.setup(background)
         print("re-setup")
     }
