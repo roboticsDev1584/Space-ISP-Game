@@ -66,15 +66,8 @@ class StatusBar : RenderableEntity {
 
             //updates the time string to display the new time
             time = "\(minutes):\(zeroSec)\(seconds % 10)"
-            //localP1LifePointer.pointee -= 1
-            //print("testing: " + String(localP1LifePointer.pointee))
-            //StatusBar.player1Life -= 1
-            //print("testing: " + String(StatusBar.player1Life))
+            print("time \(time)")
         }
-        //print("old: " + String(StatusBar.player1Life))
-        //receives the life data
-        //StatusBar.player1Life = exP1LifePointer.pointee
-        //StatusBar.player2Life = exP2LifePointer.pointee
 
         timePointer.pointee = time
         
@@ -86,7 +79,8 @@ class StatusBar : RenderableEntity {
             end = true
             win = 1
         }
-        
+        print("p1 life \(player1Life)")
+        print("p2 life \(player2Life)")
         if (!end) {
         //render banner text
         let fillStyle = FillStyle(color:Color(.white))
@@ -111,5 +105,5 @@ class StatusBar : RenderableEntity {
         }
 
         count += 1
-        }
+    }
 }

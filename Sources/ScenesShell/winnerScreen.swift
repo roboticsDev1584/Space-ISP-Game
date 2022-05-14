@@ -38,7 +38,7 @@ class WinnerScreen : RenderableEntity {
             words.font = "80pt Callout"
             canvas.render(fillStyle, words)
             //Rematch text
-            let words1 = Text(location:Point(x:canvasSize.center.x-150,y:canvasSize.center.y+100), text:"Rematch?")
+            let words1 = Text(location:Point(x:canvasSize.center.x-150,y:canvasSize.center.y+100), text:"Rematch? Press I.")
             words1.font = "50pt Callout"
             canvas.render(words1)
         }
