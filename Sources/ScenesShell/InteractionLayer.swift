@@ -48,7 +48,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     //conversion: 30 = 1 second
     var starBackground : StarBackground
 
-    let startingScreen = StartingScreen()
+    var startingScreen : StartingScreen
     let player1 = Player1Choose()
     let player2 = Player2Choose()
     let Instructions = instructions()
@@ -215,7 +215,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 insert(entity:projectile, at:.front)
             }
             insert(entity:winnerScreen, at:.front)
-            insert(entity:startingScreen, at:.back)
             case "Enter" :
                 insert(entity:Instructions, at:.front)
             case "e" :
@@ -356,6 +355,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 asteroidRects = []
                 gameEnded = false
                 gameWin = 0
+                startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
                 insert(entity:startingScreen, at:.front)
             default:
                 break
@@ -384,6 +384,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         mercuryBackground = MercuryBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
         saturnBackground = SaturnBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
         starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
 
         super.init(name:"Interaction")
     }
@@ -395,6 +396,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
         self.canvasSize = canvasSize
+        insert(entity:startingScreen, at:.back)
         insert(entity:winnerScreen, at:.front)
         
         dispatcher.registerKeyDownHandler(handler: self)

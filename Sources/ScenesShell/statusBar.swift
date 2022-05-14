@@ -66,7 +66,6 @@ class StatusBar : RenderableEntity {
 
             //updates the time string to display the new time
             time = "\(minutes):\(zeroSec)\(seconds % 10)"
-            print("time \(time)")
         }
 
         timePointer.pointee = time
@@ -79,8 +78,6 @@ class StatusBar : RenderableEntity {
             end = true
             win = 1
         }
-        print("p1 life \(player1Life)")
-        print("p2 life \(player2Life)")
         if (!end) {
         //render banner text
         let fillStyle = FillStyle(color:Color(.white))

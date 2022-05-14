@@ -8,9 +8,6 @@ class NeptuneBackground : RenderableEntity {
     let neptuneHeightPercent = 80.0
     let neptuneWidthPercent = 80.0
     var canvasSizeC : Size
-
-    //var p1LifePointer : UnsafeMutablePointer<Int>
-    //var p2LifePointer : UnsafeMutablePointer<Int>
     
     //map rendering functions
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double) {
@@ -40,8 +37,6 @@ class NeptuneBackground : RenderableEntity {
         }
         //form the image object
         neptune = Image(sourceURL:neptuneURL)
-        //p1LifePointer = .init(&p1Life)
-        //p2LifePointer = .init(&p2Life)
         
         super.init(name:"NeptuneBackground")
     }
