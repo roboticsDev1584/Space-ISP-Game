@@ -1,10 +1,6 @@
 import Scenes
 import Igis
 import Foundation
-  /*
-     This class is responsible for rendering the background.
-   */
-
 
 class StartingScreen : RenderableEntity {
     var text : Text
@@ -44,7 +40,4 @@ class StartingScreen : RenderableEntity {
         text.font = "30pt megrim"
         canvas.render(text)
     }
-
-    
-
 }

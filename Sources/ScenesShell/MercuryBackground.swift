@@ -9,6 +9,9 @@ class MercuryBackground : RenderableEntity {
     let mercuryWidthPercent = 80.0
 
     var canvasSizeC : Size
+
+    //var p1LifePointer : UnsafeMutablePointer<Int>
+    //var p2LifePointer : UnsafeMutablePointer<Int>
     
     //map rendering functions
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double) {
@@ -29,7 +32,7 @@ class MercuryBackground : RenderableEntity {
         }
     }
     
-    init() {
+    init(p1Life:inout Int, p2Life:inout Int) {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         //form the image url
@@ -38,6 +41,8 @@ class MercuryBackground : RenderableEntity {
         }
         //form the image object
         mercury = Image(sourceURL:mercuryURL)
+        //p1LifePointer = .init(&p1Life)
+        //p2LifePointer = .init(&p2Life)
 
         super.init(name:"MercuryBackground")
     }

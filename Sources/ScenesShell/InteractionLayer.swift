@@ -41,12 +41,12 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var gameEnded = false
     var gameWin = 0
 
-    let neptuneBackground = NeptuneBackground()
-    let mercuryBackground = MercuryBackground()
-    let saturnBackground = SaturnBackground()
+    var neptuneBackground : NeptuneBackground
+    var mercuryBackground : MercuryBackground
+    var saturnBackground : SaturnBackground
     let backgroundChoice = ChooseMap()
     //conversion: 30 = 1 second
-    let starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+    var starBackground : StarBackground
 
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
@@ -205,35 +205,13 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         case "r": //shoot from ship
             switch(prevShip1Key) {
             case "forwards": //fire a projectile forwards
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
                 insert(entity:projectile, at:.front)
             case "backwards": //fire a projectile backwards
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
+                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
                 insert(entity:projectile, at:.front)
             default:
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-                insert(entity:projectile, at:.front)
-            }
-        case "7": //shoot from ship2
-            var projectile : Projectile
-            switch(prevShip2Key) {
-            case "forwards": //fire a projectile forwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:ship2Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            case "backwards": //fire a projectile backwards
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:-ship2FireVelocity, shipColor:ship2Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            default:
-                projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:ship2Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            }
-            //link the projectile pointers
-            //projectile.linkShipVariables(ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives)
-            insert(entity:projectile, at:.front)
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
-                insert(entity:projectile, at:.front)
-            case "backwards": //fire a projectile backwards
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
-                insert(entity:projectile, at:.front)
-            default:
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:Color(.lightblue), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
+                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
                 insert(entity:projectile, at:.front)
             }
             insert(entity:winnerScreen, at:.front)
@@ -402,6 +380,10 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
         winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
+        neptuneBackground = NeptuneBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        mercuryBackground = MercuryBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        saturnBackground = SaturnBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0, p1Life:&ship1Lives, p2Life:&ship2Lives)
 
         super.init(name:"Interaction")
     }

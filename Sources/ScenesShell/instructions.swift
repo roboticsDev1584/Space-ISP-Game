@@ -1,14 +1,8 @@
 import Scenes
 import Igis
 import Foundation
-  /*
-     This class is responsible for rendering the background.
-   */
-
 
 class instructions : RenderableEntity {
-//    var fillStyle : FillStyle
-//    let canvas : Canvas
     let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging

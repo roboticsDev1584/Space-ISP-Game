@@ -1,14 +1,8 @@
 import Scenes
 import Igis
 import Foundation
-  /*
-     This class is responsible for rendering the background.
-   */
-
 
 class ChooseMap : RenderableEntity {
-//    var fillStyle : FillStyle
-//    let canvas : Canvas
     let background : Image
     var warning = Warning()
     
@@ -57,6 +51,5 @@ class ChooseMap : RenderableEntity {
 
         let words5 = Text(location:Point(x:30, y:600), text:"Star: Players must defeat each other before star fully turns into black hole (Press y)")
         words5.font = "45pt Callout"
-        let fillStyle = FillStyle(color:Color(red:3, green:244, blue:252))
-        }
+    }
 }
