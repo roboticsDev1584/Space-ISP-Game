@@ -1,4 +1,4 @@
-import Scenes
+\83;40800;0cimport Scenes
 import Igis
 import Foundation
   /*
@@ -9,7 +9,7 @@ import Foundation
 class StartingScreen : RenderableEntity {
     var text : Text
     let background : Image
-
+    var ratio : Double
     init() {
         // Using a meaningful name can be helpful for debugging
         text = Text(location:Point(x:0, y:300), text:"Hello, World!")
@@ -17,7 +17,7 @@ class StartingScreen : RenderableEntity {
             fatalError("failed to load backgroundURL")
         }
         background = Image(sourceURL:backgroundURL)
-        
+        self.ratio = 0
         super.init(name:"StartingScreen")
     }
 
@@ -27,6 +27,8 @@ class StartingScreen : RenderableEntity {
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        ratio = (80.0/Double(canvasSize.width)) 
+        print(ratio)
         canvas.setup(background)
     }
     override func render(canvas:Canvas) {
