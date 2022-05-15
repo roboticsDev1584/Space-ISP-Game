@@ -40,6 +40,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var ship2Lives = 3
     var gameEnded = false
     var gameWin = 0
+    var projectiles : [Projectile] = []
 
     var neptuneBackground : NeptuneBackground
     var mercuryBackground : MercuryBackground
@@ -65,6 +66,15 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.rotation = ship2Rotate
         ship1.color = ship1Color
         ship2.color = ship2Color
+        //manage termination of projectiles
+        //get an array of projectiles that have terminated
+        let terminatedArray = projectiles.filter { $0.terminate }
+        for index in 0 ..< terminatedArray.count {
+            //this should deinitialize the object
+            remove(entity:terminatedArray[index])
+        }
+        //update the projectiles array to only live projectiles, continue here
+        projectiles = projectiles.filter { !$0.terminate }
     }
 
     func hasColor(Colored:Bool) {
@@ -184,6 +194,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     func onMouseDown(globalLocation:Point) {
         let projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:Color(.lightgreen), ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
         insert(entity:projectile, at:.front)
+        projectiles.append(projectile)
         insert(entity:winnerScreen, at:.front)
     }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
@@ -191,8 +202,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         case "w": //move ship1 forwards
             moveShip1(moveX:moveAmount, moveY:moveAmount)
             prevShip1Key = "forwards"
-            print("p1 lives \(ship1Lives)")
-            print("p2 lives \(ship2Lives)")
         case "s": //move ship1 backwards
             moveShip1(moveX:-moveAmount, moveY:-moveAmount)
             prevShip1Key = "backwards"
@@ -203,162 +212,158 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             ship1Rotate += turnAmount
             prevShip1Key = "left"
         case "r": //shoot from ship
-            switch(prevShip1Key) {
-            case "forwards": //fire a projectile forwards
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
-                insert(entity:projectile, at:.front)
-            case "backwards": //fire a projectile backwards
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:-ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
-                insert(entity:projectile, at:.front)
-            default:
-                let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
-                insert(entity:projectile, at:.front)
-            }
+            let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
+            projectiles.append(projectile)
+            insert(entity:projectile, at:.front)    
             insert(entity:winnerScreen, at:.front)
-            case "Enter" :
-                insert(entity:Instructions, at:.front)
-            case "e" :
-                insert(entity:player1, at:.front)
+        case "Enter" :
+            insert(entity:Instructions, at:.front)
+        case "e" :
+            insert(entity:player1, at:.front)
+            placeShipsFront()
+            ship1X = 60
+            ship2X = canvasSize.width - 90
+            ship1Y = (canvasSize.height / 2)
+            ship2Y = (canvasSize.height / 2)
+        case "o" :
+            if hasColored == false {
+                ship1Color = Color(.blue)
+                blue = true
+                insert(entity:player2, at:.front)
                 placeShipsFront()
-                ship1X = 60
-                ship2X = canvasSize.width - 90
-                ship1Y = (canvasSize.height / 2)
-                ship2Y = (canvasSize.height / 2)
-            case "o" :
+            }
+        case "u" :
+            if hasColored == false {
+                ship1Color = Color(.green)
+                green = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "t" :
+            if hasColored == false {
+                ship1Color = Color(.red)
+                red = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "v" :
+            if hasColored == false { 
+                ship1Color = Color(.yellow)
+                yellow = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "l" :
+            if blue == false {
+                ship2Color = Color(.blue)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
                 if hasColored == false {
-                    ship1Color = Color(.blue)
-                    blue = true
-                    insert(entity:player2, at:.front)
-                    placeShipsFront()
+                    insert(entity:warning, at:.front)
                 }
-            case "u" :
+            }
+        case "g" :
+            if green == false {
+                ship2Color = Color(.green)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else  {
                 if hasColored == false {
-                    ship1Color = Color(.green)
-                    green = true
-                    insert(entity:player2, at:.front)
-                    placeShipsFront()
+                    insert(entity:warning, at:.front)
                 }
-            case "t" :
+            }
+            
+        case "h" :
+            if red == false {
+                ship2Color = Color(.red)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
                 if hasColored == false {
-                    ship1Color = Color(.red)
-                    red = true
-                    insert(entity:player2, at:.front)
-                    placeShipsFront()
+                    insert(entity:warning, at:.front)
                 }
-            case "v" :
-                if hasColored == false { 
-                    ship1Color = Color(.yellow)
-                    yellow = true
-                    insert(entity:player2, at:.front)
-                    placeShipsFront()
+            }
+            
+        case "k" :
+            if yellow == false {
+                ship2Color = Color(.yellow)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
+                if hasColored == false {
+                    insert(entity:warning, at:.front)
                 }
-            case "l" :
-                if blue == false {
-                    ship2Color = Color(.blue)
-                    insert(entity:backgroundChoice, at:.front)
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-            case "g" :
-                if green == false {
-                    ship2Color = Color(.green)
-                    insert(entity:backgroundChoice, at:.front)
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else  {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                
-            case "h" :
-                if red == false {
-                    ship2Color = Color(.red)
-                    insert(entity:backgroundChoice, at:.front)
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                    
-            case "k" :
-                if yellow == false {
-                    ship2Color = Color(.yellow)
-                    insert(entity:backgroundChoice, at:.front)
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                
-            case "n" :
-                if hasRendered == false {
-                    insert(entity:neptuneBackground, at:.front)
-                    timeAmount = "2:00"
-                    insert(entity:statusBar, at:.front)
-                    placeShipsFront()
-                    importAsteroids()
-                    hasRendered = true
-                }
-            case "m" :
-                if hasRendered == false {
-                    insert(entity:mercuryBackground, at:.front)
-                    timeAmount = "1:30"
-                    insert(entity:statusBar, at:.front)
-                    placeShipsFront()
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            case "f" :
-                if hasRendered == false {
-                    insert(entity:saturnBackground, at:.front)
-                    timeAmount = "5:00"
-                    insert(entity:statusBar, at:.front)
-                    placeShipsFront()
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            case "y" :
-                if hasRendered == false {
-                    insert(entity:starBackground, at:.front)
-                    starBackground.begin()
-                    timeAmount = "1:00"
-                    insert(entity:statusBar, at:.front)
-                    placeShipsFront()
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            case "i" :
-                //this resets all of the game variables so that it can be played again
-                ship1Lives = 3
-                ship2Lives = 3
-                ship1Rotate = 0.0
-                ship2Rotate = 180.0
-                ship1Color = Color(.white)
-                ship2Color = Color(.white)
-                hasColored = false
-                red = false
-                green = false
-                yellow = false
-                blue = false
+            }
+            
+        case "n" :
+            if hasRendered == false {
+                insert(entity:neptuneBackground, at:.front)
+                timeAmount = "2:00"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true
+            }
+        case "m" :
+            if hasRendered == false {
+                insert(entity:mercuryBackground, at:.front)
+                timeAmount = "1:30"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "f" :
+            if hasRendered == false {
+                insert(entity:saturnBackground, at:.front)
                 timeAmount = "5:00"
-                hasRendered = false
-                asteroid = []
-                asteroidRects = []
-                gameEnded = false
-                gameWin = 0
-                startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
-                insert(entity:startingScreen, at:.front)
-            default:
-                break
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "y" :
+            if hasRendered == false {
+                insert(entity:starBackground, at:.front)
+                starBackground.begin()
+                timeAmount = "1:00"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "i" :
+            //deinitialize status bar
+            remove(entity:statusBar)
+            //this resets all of the game variables so that it can be played again
+            ship1Lives = 3
+            ship2Lives = 3
+            ship1Rotate = 0.0
+            ship2Rotate = 180.0
+            ship1Color = Color(.white)
+            ship2Color = Color(.white)
+            hasColored = false
+            red = false
+            green = false
+            yellow = false
+            blue = false
+            timeAmount = "5:00"
+            hasRendered = false
+            asteroid = []
+            asteroidRects = []
+            gameEnded = false
+            gameWin = 0
+            //reinitialize status bar
+            statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+            startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
+            insert(entity:startingScreen, at:.front)
+        default:
+            break
         }
         if (ship1Rotate < 0.0) {
             ship1Rotate += 360.0

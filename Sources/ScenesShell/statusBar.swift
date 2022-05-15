@@ -28,6 +28,11 @@ class StatusBar : RenderableEntity {
         super.init(name:"StatusBar")
     }
 
+    //when a game ends, status bar is deinitialized
+    deinit {
+        
+    }
+
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 

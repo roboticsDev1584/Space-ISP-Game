@@ -6,9 +6,11 @@ class StartingScreen : RenderableEntity {
     var text : Text
     let background : Image
     var lifeWait = 0
+    var lifeChange1 = 0
+    var lifeChange2 = 0
 
-    var p1LifePointer : UnsafeMutablePointer<Int>
-    var p2LifePointer : UnsafeMutablePointer<Int>
+    //var p1LifePointer : UnsafeMutablePointer<Int>
+    //var p2LifePointer : UnsafeMutablePointer<Int>
 
     var ratio : Double
     
@@ -19,9 +21,8 @@ class StartingScreen : RenderableEntity {
             fatalError("failed to load backgroundURL")
         }
         background = Image(sourceURL:backgroundURL)
-        p1LifePointer = .init(&p1Life)
-        p2LifePointer = .init(&p2Life)
-        print("re-init")
+        /*p1LifePointer = .init(&p1Life)
+        p2LifePointer = .init(&p2Life)*/
         self.ratio = 0
         
         super.init(name:"StartingScreen")
@@ -34,20 +35,21 @@ class StartingScreen : RenderableEntity {
     
     override func setup(canvasSize:Size,canvas:Canvas) {
         //render background
-        ratio = (80.0/Double(canvasSize.width)) 
-        print(ratio)
+        ratio = (80.0/Double(canvasSize.width))
         canvas.setup(background)
-        print("re-setup")
     }
     override func render(canvas:Canvas) {
         //makes sure that the life pointers are properly set to 3 lives each at the start of each rematch
+        /*lifeChange1 = p1LifePointer.pointee
+        lifeChange2 = p2LifePointer.pointee
         if (lifeWait < 3) {
-            p1LifePointer.pointee = 3
-            p2LifePointer.pointee = 3
-            print("p2 lives: \(p2LifePointer.pointee)")
+            lifeChange1 = 3
+            lifeChange2 = 3
             lifeWait += 1
         }
-        print("p2 lives: \(p2LifePointer.pointee)")
+        print("lifeChange2: \(lifeChange2)")
+        p1LifePointer.pointee = lifeChange1
+        p2LifePointer.pointee = lifeChange2*/
         
         let canvasSize = canvas.canvasSize!
         
