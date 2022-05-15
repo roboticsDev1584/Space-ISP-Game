@@ -13,12 +13,16 @@ class Ships: RenderableEntity {
     var pointY : Int
     var rotation : Double
     var color : Color
+
+    var blackHoleStrengthPointer : UnsafeMutablePointer<Int>
     
-    init(PointX:Int,PointY:Int,rotation:Double,color:Color) {
+    init(PointX:Int,PointY:Int,rotation:Double,color:Color, blHoleStr:inout Int) {
         self.pointX = PointX
         self.pointY = PointY
         self.rotation = rotation
         self.color = color
+
+        blackHoleStrengthPointer = .init(&blHoleStr)
         
         lineWidth = LineWidth(width:2)
         strokeStyle = StrokeStyle(color:Color(red:115, green:114, blue:114))
@@ -30,6 +34,18 @@ class Ships: RenderableEntity {
     
     
     override func render(canvas:Canvas) {
+        let canvasSize = canvas.canvasSize!
+        let blackHoleMove = 1
+        let blStr = blackHoleStrengthPointer.pointee
+        //if black hole, move towards center based on strength
+        if (blStr > 0) {
+            pointX -= blackHoleMove * blStr
+            pointY -= blackHoleMove * blStr
+            //make sure that the ships are not pulled beyond the center point in a black hole
+            pointX = (pointX < canvasSize.center.x) ? canvasSize.center.x : pointX
+            pointY = (pointY < canvasSize.center.y) ? canvasSize.center.y : pointY
+        }
+        
         //recreate the ship object
         let r = 26.0
         let turretLength = 14.0

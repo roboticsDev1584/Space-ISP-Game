@@ -41,6 +41,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var timeAmount = "5:00"
     var ship1Lives = 3
     var ship2Lives = 3
+    var blackHoleStrength = 0
     var gameEnded = false
     var gameWin = 0
     var projectiles : [Projectile] = []
@@ -50,7 +51,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     let saturnBackground = SaturnBackground()
     let backgroundChoice = ChooseMap()
     //conversion: 30 = 1 second
-    let starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+    var starBackground : StarBackground
 
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
@@ -400,12 +401,13 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         }
         updateShipPositions()
     }
-    
+   
     init() {
         statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
-        ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
-        ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
+        ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue),blHoleStr:&blackHoleStrength)
+        ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green),blHoleStr:&blackHoleStrength)
         winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
+        starBackground = StarBackground(waitStar:30,changeStar:30,waitRedGiant:30,changeRedGiant:30,waitSupernova:30,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0,blHoleStr:&blackHoleStrength)
 
         super.init(name:"Interaction")
     }

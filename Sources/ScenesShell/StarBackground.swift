@@ -8,6 +8,7 @@ class StarBackground : RenderableEntity {
     let redGiant : Image
     let supernova : Image
     let blackHole : Image
+    let stars : Image
     
     let starHeightPercent = 50.0
     let starWidthPercent = 90.0
@@ -16,7 +17,7 @@ class StarBackground : RenderableEntity {
     let supernovaHeightPercent = 64.0
     let supernovaWidthPercent = 86.0
     let blackHoleHeightPercent = 56.0
-    let blackHoleWidthPercent = 84.0
+    let blackHoleWidthPercent = 56.0
 
     let waitStar : Int
     let changeStar : Int
@@ -32,13 +33,18 @@ class StarBackground : RenderableEntity {
     var timeCount : Int // used to keep track of the current time when changing maps
     var state : Int // used to tell the user the current state of the background
     var currentScale : Double //used to resize the backgrounds in render()
+
+    var blHoleStrength = 0
+    var blackHoleStrengthPointer : UnsafeMutablePointer<Int>
     
     //map rendering functions
-    func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double, multiplier:Double) {
-        let backgroundRect = Rect(size:canvasSz)
-        let background = Rectangle(rect:backgroundRect, fillMode:.fillAndStroke)
-        let backgroundFill = FillStyle(color:Color(.black))
-        canvas.render(backgroundFill, background)
+    func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double, multiplier:Double, backgroundShow:Bool = true) {
+        if (backgroundShow) {
+            let backgroundRect = Rect(size:canvasSz)
+            let background = Rectangle(rect:backgroundRect, fillMode:.fillAndStroke)
+            let backgroundFill = FillStyle(color:Color(.black))
+            canvas.render(backgroundFill, background)
+        }
 
         //variable used to denote the smallest canvasSize dimension
         let canvasSzRef = (canvasSz.width < canvasSz.height) ? canvasSz.width : canvasSz.height
@@ -61,12 +67,13 @@ class StarBackground : RenderableEntity {
         return state
     }
     
-    init(waitStar:Int, changeStar:Int, waitRedGiant:Int, changeRedGiant:Int, waitSupernova:Int, enlargeBlackHole:Int, starTargetMultiplier:Double, redGiantTargetMultiplier:Double, blackHoleTargetMultiplier:Double) {
+    init(waitStar:Int, changeStar:Int, waitRedGiant:Int, changeRedGiant:Int, waitSupernova:Int, enlargeBlackHole:Int, starTargetMultiplier:Double, redGiantTargetMultiplier:Double, blackHoleTargetMultiplier:Double, blHoleStr:inout Int) {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         timeCount = 0
         state = -1
         currentScale = 1.0
+        blackHoleStrengthPointer = .init(&blHoleStr)
 
         //initialize constants
         self.waitStar = waitStar
@@ -89,7 +96,10 @@ class StarBackground : RenderableEntity {
         guard let supernovaURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/c/ca/Supernova_%28CGI%29.jpg") else {
             fatalError("Failed to create URL")
         }
-        guard let blackHoleURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Black_Hole_in_the_universe.jpg/800px-Black_Hole_in_the_universe.jpg") else {
+        guard let blackHoleURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/BlackHole.jpg") else {
+            fatalError("Failed to create URL")
+        }
+        guard let starsURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/Stars.png") else {
             fatalError("Failed to create URL")
         }
         
@@ -98,6 +108,7 @@ class StarBackground : RenderableEntity {
         redGiant = Image(sourceURL:redGiantURL)
         supernova = Image(sourceURL:supernovaURL)
         blackHole = Image(sourceURL:blackHoleURL)
+        stars = Image(sourceURL:starsURL)
 
         super.init(name:"StarBackground")
     }
@@ -107,6 +118,7 @@ class StarBackground : RenderableEntity {
         canvas.setup(redGiant)
         canvas.setup(supernova)
         canvas.setup(blackHole)
+        canvas.setup(stars)
     
         canvasSizeC = canvasSize
     }
@@ -158,6 +170,12 @@ class StarBackground : RenderableEntity {
             }
             renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:supernova, planetHeight:supernovaHeightPercent, planetWidth:supernovaWidthPercent, multiplier:1.8)
         case 5: //continually enlarge the black hole background
+            //place the stars behind the black hole
+            if stars.isReady {
+                stars.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSizeC.center.x*2, height:canvasSizeC.center.y*2)))
+                canvas.render(stars)
+            }
+            //enlarge the black hole
             var transitionScale = currentScale
             if (timeCount < enlargeBlackHole) {
                 transitionScale = transitionScale + ((Double(timeCount) / Double(enlargeBlackHole)) * 1.0)
@@ -166,12 +184,14 @@ class StarBackground : RenderableEntity {
                 timeCount = 0
                 transitionScale = transitionScale + 1.0
                 currentScale = currentScale + 1.0
+                blHoleStrength += 1
             }
             currentScale = (currentScale > blackHoleTargetMultiplier) ? blackHoleTargetMultiplier : currentScale //this ensures that the overall background is not over-scaled
             transitionScale = (transitionScale > blackHoleTargetMultiplier) ? blackHoleTargetMultiplier : transitionScale //this ensures that the transitioning background is not over-scaled
-            renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:blackHole, planetHeight:blackHoleHeightPercent, planetWidth:blackHoleWidthPercent, multiplier:transitionScale)
+            renderPlanet(canvasSz:canvasSizeC, canvas:canvas, planet:blackHole, planetHeight:blackHoleHeightPercent, planetWidth:blackHoleWidthPercent, multiplier:transitionScale, backgroundShow:false)
         default:
             break
         }
+        blackHoleStrengthPointer.pointee = blHoleStrength
     }
 }
