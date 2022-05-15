@@ -51,5 +51,6 @@ class ChooseMap : RenderableEntity {
 
         let words5 = Text(location:Point(x:30, y:600), text:"Star: Players must defeat each other before star fully turns into black hole (Press y)")
         words5.font = "45pt Callout"
+        canvas.render(words5)
     }
 }

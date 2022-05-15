@@ -10,8 +10,8 @@ class Projectile : RenderableEntity {
     var asteroidRectsSides : [Int] = []
     
     let fireVelocity : Double
-    var fireVelocityXSign = 1
-    var fireVelocityYSign = 1
+    var fireVelocityXSign = 5
+    var fireVelocityYSign = 5
     let degree : Double
     var terminate : Bool
     var lives1 = 0

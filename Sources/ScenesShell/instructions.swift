@@ -6,7 +6,7 @@ class instructions : RenderableEntity {
     let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging
-        guard let backgroundURL = URL(string:"https://images.unsplash.com/photo-1465101162946-4377e57745c3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c3BhY2UlMjBiYWNrZ3JvdW5kfGVufDB8fDB8fA%3D%3D&w=1000&q=80") else {
+        guard let backgroundURL = URL(string:"https://images.unsplash.com/photo-1520034475321-cbe63696469a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c3BhY2UlMjBzdGFyc3xlbnwwfHwwfHw%3D&w=1000&q=80") else {
             fatalError("failed to load backgroundURL")
         }
         background = Image(sourceURL:backgroundURL)
@@ -43,5 +43,10 @@ class instructions : RenderableEntity {
 
         let words4 = Text(location:Point(x:canvasSize.center.x-800, y:500), text:"Player 2 use the mouse to move around the screen and left mouse click to shoot.")
         words4.font = "30pt megrim"
+        canvas.render(words4)
+
+        let words5 = Text(location:Point(x:10, y:600), text:"Press E to continue.")
+        words5.font = "30pt megrim"
+        canvas.render(words5)
     }
 }
