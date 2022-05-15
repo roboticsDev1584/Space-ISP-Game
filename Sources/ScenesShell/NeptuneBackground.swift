@@ -28,7 +28,7 @@ class NeptuneBackground : RenderableEntity {
         }
     }
     
-    init() {
+    init(p1Life:inout Int, p2Life:inout Int) {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         //form the image url

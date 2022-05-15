@@ -32,6 +32,9 @@ class StarBackground : RenderableEntity {
     var timeCount : Int // used to keep track of the current time when changing maps
     var state : Int // used to tell the user the current state of the background
     var currentScale : Double //used to resize the backgrounds in render()
+
+    //var p1LifePointer : UnsafeMutablePointer<Int>
+    //var p2LifePointer : UnsafeMutablePointer<Int>
     
     //map rendering functions
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double, multiplier:Double) {
@@ -61,13 +64,15 @@ class StarBackground : RenderableEntity {
         return state
     }
     
-    init(waitStar:Int, changeStar:Int, waitRedGiant:Int, changeRedGiant:Int, waitSupernova:Int, enlargeBlackHole:Int, starTargetMultiplier:Double, redGiantTargetMultiplier:Double, blackHoleTargetMultiplier:Double) {
+    init(waitStar:Int, changeStar:Int, waitRedGiant:Int, changeRedGiant:Int, waitSupernova:Int, enlargeBlackHole:Int, starTargetMultiplier:Double, redGiantTargetMultiplier:Double, blackHoleTargetMultiplier:Double, p1Life:inout Int, p2Life:inout Int) {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         timeCount = 0
         state = -1
         currentScale = 1.0
 
+        //p1LifePointer = .init(&p1Life)
+        //p2LifePointer = .init(&p2Life)
         //initialize constants
         self.waitStar = waitStar
         self.changeStar = changeStar

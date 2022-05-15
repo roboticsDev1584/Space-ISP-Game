@@ -28,6 +28,11 @@ class StatusBar : RenderableEntity {
         super.init(name:"StatusBar")
     }
 
+    //when a game ends, status bar is deinitialized
+    deinit {
+        
+    }
+
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 
@@ -66,15 +71,7 @@ class StatusBar : RenderableEntity {
 
             //updates the time string to display the new time
             time = "\(minutes):\(zeroSec)\(seconds % 10)"
-            //localP1LifePointer.pointee -= 1
-            //print("testing: " + String(localP1LifePointer.pointee))
-            //StatusBar.player1Life -= 1
-            //print("testing: " + String(StatusBar.player1Life))
         }
-        //print("old: " + String(StatusBar.player1Life))
-        //receives the life data
-        //StatusBar.player1Life = exP1LifePointer.pointee
-        //StatusBar.player2Life = exP2LifePointer.pointee
 
         timePointer.pointee = time
         
@@ -86,7 +83,6 @@ class StatusBar : RenderableEntity {
             end = true
             win = 1
         }
-        
         if (!end) {
         //render banner text
         let fillStyle = FillStyle(color:Color(.white))
@@ -98,7 +94,7 @@ class StatusBar : RenderableEntity {
         wordsTime.font = "30pt Callout"
         canvas.render(wordsTime)
         
-        let words1 = Text(location:Point(x:canvasSize.center.x+400,y:50), text:"P2 Lives: \(player2Life)")
+        let words1 = Text(location:Point(x:canvasSize.width-225,y:50), text:"P2 Lives: \(player2Life)")
         words1.font = "30pt Callout"
         canvas.render(words1)
         }
@@ -111,5 +107,5 @@ class StatusBar : RenderableEntity {
         }
 
         count += 1
-        }
+    }
 }

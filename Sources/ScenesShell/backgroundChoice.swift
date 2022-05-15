@@ -1,14 +1,8 @@
 import Scenes
 import Igis
 import Foundation
-  /*
-     This class is responsible for rendering the background.
-   */
-
 
 class ChooseMap : RenderableEntity {
-//    var fillStyle : FillStyle
-//    let canvas : Canvas
     let background : Image
     var warning = Warning()
     

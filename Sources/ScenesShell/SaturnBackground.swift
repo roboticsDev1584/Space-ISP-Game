@@ -8,6 +8,9 @@ class SaturnBackground : RenderableEntity {
     let saturnHeightPercent = 60.0
     let saturnWidthPercent = 96.0
     var canvasSizeC : Size
+
+    //var p1LifePointer : UnsafeMutablePointer<Int>
+    //var p2LifePointer : UnsafeMutablePointer<Int>
     
     //map rendering functions
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double) {
@@ -28,9 +31,11 @@ class SaturnBackground : RenderableEntity {
         }
     }
     
-    init() {
+    init(p1Life:inout Int, p2Life:inout Int) {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
+        //p1LifePointer = .init(&p1Life)
+        //p2LifePointer = .init(&p2Life)
         //form the image url
         guard let saturnURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg") else {
             fatalError("Failed to create neptune URL")

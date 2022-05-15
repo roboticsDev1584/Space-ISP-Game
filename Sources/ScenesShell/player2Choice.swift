@@ -1,14 +1,8 @@
 import Scenes
 import Igis
 import Foundation
-  /*
-     This class is responsible for rendering the background.
-   */
-
 
 class Player2Choose : RenderableEntity {
-//    var fillStyle : FillStyle
-//    let canvas : Canvas
     let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging
@@ -29,7 +23,7 @@ class Player2Choose : RenderableEntity {
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
         }
-        let fill = FillStyle(color:Color(.white))
+        let fillStyle = FillStyle(color:Color(.white))
         let words = Text(location:Point(x:canvasSize.center.x-680,y:100), text:"Player 2 choose your ship color")
         words.font = "80pt Callout"
         canvas.render(fill, words)
@@ -53,5 +47,5 @@ class Player2Choose : RenderableEntity {
         let words4 = Text(location:Point(x:canvasSize.center.x-255, y:500), text:"Yellow (Press K)")
         words4.font = "45pt Callout"
         canvas.render(fill4, words4)
-        }
+    }
 }

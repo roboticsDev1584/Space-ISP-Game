@@ -3,7 +3,6 @@ import Igis
 import Scenes
 
 class Projectile : RenderableEntity {
-
     var projectile : Ellipse
     let projectileBody : FillStyle
     let projectileOutline : StrokeStyle
@@ -27,6 +26,7 @@ class Projectile : RenderableEntity {
     var ship2YPointer : UnsafeMutablePointer<Int>
     var lives1Pointer : UnsafeMutablePointer<Int>
     var lives2Pointer : UnsafeMutablePointer<Int>
+
     
     init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int, rects:[Rect]) {        
         //initialize the projectile object
@@ -58,6 +58,11 @@ class Projectile : RenderableEntity {
         self.lives2 = lives2Pointer.pointee
         
         super.init(name:"Projectile")
+    }
+
+    //if terminate is true, object is deinitialized in InteractionLayer
+    deinit {
+        
     }
     
     override func render(canvas:Canvas) {
@@ -152,10 +157,6 @@ class Projectile : RenderableEntity {
         
         if (!terminate) {
             canvas.render(projectileBody, projectileOutline, projectile)
-        }
-        //stop rendering projectile if told to terminate
-        else {
-            canvas.render()
         }
 
     }

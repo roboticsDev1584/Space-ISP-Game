@@ -3,7 +3,6 @@ import Scenes
 import Igis
 
 class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandler {
-    
     var hasRendered = false
 
     var hasColored = false
@@ -27,10 +26,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var ship2Y = 0
     var ship1Rotate = 0.0
     var ship2Rotate = 180.0
-    var ship1FSafe = true
-    var ship2FSafe = true
-    var ship1BSafe = true
-    var ship2BSafe = true
     var ship1FireVelocity = 6.0
     var ship2FireVelocity = 6.0
     var ship1Color = Color(.white)
@@ -45,15 +40,16 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var ship2Lives = 3
     var gameEnded = false
     var gameWin = 0
+    var projectiles : [Projectile] = []
 
-    let neptuneBackground = NeptuneBackground()
-    let mercuryBackground = MercuryBackground()
-    let saturnBackground = SaturnBackground()
+    var neptuneBackground : NeptuneBackground
+    var mercuryBackground : MercuryBackground
+    var saturnBackground : SaturnBackground
     let backgroundChoice = ChooseMap()
     //conversion: 30 = 1 second
-    let starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
+    var starBackground : StarBackground
 
-    let startingScreen = StartingScreen()
+    var startingScreen : StartingScreen
     let player1 = Player1Choose()
     let player2 = Player2Choose()
     let Instructions = instructions()
@@ -70,6 +66,15 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.rotation = ship2Rotate
         ship1.color = ship1Color
         ship2.color = ship2Color
+        //manage termination of projectiles
+        //get an array of projectiles that have terminated
+        let terminatedArray = projectiles.filter { $0.terminate }
+        for index in 0 ..< terminatedArray.count {
+            //this should deinitialize the object
+            remove(entity:terminatedArray[index])
+        }
+        //update the projectiles array to only live projectiles, continue here
+        projectiles = projectiles.filter { !$0.terminate }
     }
 
     func hasColor(Colored:Bool) {
@@ -83,8 +88,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     }
         
     func importAsteroids() {
-        //cannot be too high of an asteroid count or it takes too long to find a safe place to render more asteroids
-        let asteroidCount = Int.random(in:2 ... 4)
+        //cannot be too high of an asteroid count or it takes too long to find a safe place to render more asteroids, anything above 5 is too high
+        let asteroidCount = Int.random(in:3 ... 5)
         var safe = false
         var centerX = 0
         var centerY = 0
@@ -92,8 +97,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         for _ in 1 ... asteroidCount {
             safe = false
             while safe == false {
-                centerX = Int.random(in:220 ... canvasSize.width-220)
-                centerY = Int.random(in:220 ... canvasSize.height-220)
+                centerX = Int.random(in:canvasSize.center.x-400 ... canvasSize.center.x+400)
+                centerY = Int.random(in:canvasSize.center.y-400 ... canvasSize.center.y+400)
                 radius = Int.random(in:40 ... 100)
                 let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
                 if renderedAsteroid.boundaries() == true {
@@ -107,6 +112,10 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
         }
     }
+    func placeShipsFront() {
+        insert(entity:ship1, at:.front)
+        insert(entity:ship2, at:.front)
+    }
     //checks to see if the ship is running into an asteroid, direction 0 is forward, direction 1 is backward
     func checkBoundaries(player:Int) -> Bool {
         var safe = true
@@ -117,7 +126,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         default:
             shipCenter = Point(x:ship2X, y:ship2Y)
         }
-        print("Player \(player), Center \(shipCenter)")
         //create a bounding rect around the ship
         let shipRadius = 32
         let shipBoundingRect = Rect(topLeft:Point(x:shipCenter.x - shipRadius, y:shipCenter.y - shipRadius), size:Size(width:shipRadius * 2, height:shipRadius * 2))
@@ -186,6 +194,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     func onMouseDown(globalLocation:Point) {
         let projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:ship2Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
         insert(entity:projectile, at:.front)
+        projectiles.append(projectile)
         insert(entity:winnerScreen, at:.front)
     }
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
@@ -213,121 +222,159 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             default:
                 let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
                 insert(entity:projectile, at:.front)
-            }
+=======
+            let projectile = Projectile(x:(ship1X + Int(40.0 * cos(ship1Rotate * Double.pi / 180.0))), y:(ship1Y - Int(40.0 * sin(ship1Rotate * Double.pi / 180.0))), degree:ship1Rotate, fireVelocity:ship1FireVelocity, shipColor:ship1Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
+            projectiles.append(projectile)
+            insert(entity:projectile, at:.front)    
             insert(entity:winnerScreen, at:.front)
-            insert(entity:startingScreen, at:.back)
-            case "Enter" :
-                insert(entity:Instructions, at:.back)
-            case "e" :
-                insert(entity:ship1, at:.front)
-                insert(entity:player1, at:.inFrontOf(object:Instructions))
-                insert(entity:ship2, at:.front)
-            case "o" :
+        case "Enter" :
+            insert(entity:Instructions, at:.front)
+        case "e" :
+            insert(entity:player1, at:.front)
+            placeShipsFront()
+            ship1X = 60
+            ship2X = canvasSize.width - 90
+            ship1Y = (canvasSize.height / 2)
+            ship2Y = (canvasSize.height / 2)
+        case "o" :
+            if hasColored == false {
+                ship1Color = Color(.blue)
+                blue = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "u" :
+            if hasColored == false {
+                ship1Color = Color(.green)
+                green = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "t" :
+            if hasColored == false {
+                ship1Color = Color(.red)
+                red = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "v" :
+            if hasColored == false { 
+                ship1Color = Color(.yellow)
+                yellow = true
+                insert(entity:player2, at:.front)
+                placeShipsFront()
+            }
+        case "l" :
+            if blue == false {
+                ship2Color = Color(.blue)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
                 if hasColored == false {
-                    ship1Color = Color(.blue)
-                    blue = true
-                    insert(entity:player2, at:.inFrontOf(object:player1))
+                    insert(entity:warning, at:.front)
                 }
-            case "u" :
+            }
+        case "g" :
+            if green == false {
+                ship2Color = Color(.green)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else  {
                 if hasColored == false {
-                    ship1Color = Color(.green)
-                    green = true
-                    insert(entity:player2, at:.inFrontOf(object:player1))
+                    insert(entity:warning, at:.front)
                 }
-            case "t" :
+            }
+            
+        case "h" :
+            if red == false {
+                ship2Color = Color(.red)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
                 if hasColored == false {
-                    ship1Color = Color(.red)
-                    red = true
-                    insert(entity:player2, at:.inFrontOf(object:player1))
+                    insert(entity:warning, at:.front)
                 }
-            case "v" :
-                if hasColored == false { 
-                    ship1Color = Color(.yellow)
-                    yellow = true
-                    insert(entity:player2, at:.inFrontOf(object:player1))
+            }
+            
+        case "k" :
+            if yellow == false {
+                ship2Color = Color(.yellow)
+                insert(entity:backgroundChoice, at:.front)
+                warning.terminate = true
+                hasColor(Colored:true) 
+            } else {
+                if hasColored == false {
+                    insert(entity:warning, at:.front)
                 }
-            case "l" :
-                if blue == false {
-                    ship2Color = Color(.blue)
-                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-            case "g" :
-                if green == false {
-                    ship2Color = Color(.green)
-                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else  {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                
-            case "h" :
-                if red == false {
-                    ship2Color = Color(.red)
-                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                    
-            case "k" :
-                if yellow == false {
-                    ship2Color = Color(.yellow)
-                    insert(entity:backgroundChoice, at:.inFrontOf(object:player2))
-                    warning.terminate = true
-                    hasColor(Colored:true) 
-                } else {
-                    if hasColored == false {
-                        insert(entity:warning, at:.front)
-                    }
-                }
-                
-            case "n" :
-                if hasRendered == false {
-                    insert(entity:neptuneBackground, at:.inFrontOf(object:backgroundChoice))
-                    timeAmount = "2:00"
-                    insert(entity:statusBar, at:.front)
-                    importAsteroids()
-                    hasRendered = true
-                }
-            case "m" :
-                if hasRendered == false {
-                    insert(entity:mercuryBackground, at:.inFrontOf(object:backgroundChoice))
-                    timeAmount = "1:30"
-                    insert(entity:statusBar, at:.front)
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            case "f" :
-                if hasRendered == false {
-                    insert(entity:saturnBackground, at:.inFrontOf(object:backgroundChoice))
-                    timeAmount = "5:00"
-                    insert(entity:statusBar, at:.front)
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            case "y" :
-                if hasRendered == false {
-                    insert(entity:starBackground, at:.inFrontOf(object:backgroundChoice))
-                    starBackground.begin()
-                    timeAmount = "1:00"
-                    insert(entity:statusBar, at:.front)
-                    importAsteroids()
-                    hasRendered = true 
-                }
-            default:
-                break
+            }
+            
+        case "n" :
+            if hasRendered == false {
+                insert(entity:neptuneBackground, at:.front)
+                timeAmount = "2:00"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true
+            }
+        case "m" :
+            if hasRendered == false {
+                insert(entity:mercuryBackground, at:.front)
+                timeAmount = "1:30"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "f" :
+            if hasRendered == false {
+                insert(entity:saturnBackground, at:.front)
+                timeAmount = "5:00"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "y" :
+            if hasRendered == false {
+                insert(entity:starBackground, at:.front)
+                starBackground.begin()
+                timeAmount = "1:00"
+                insert(entity:statusBar, at:.front)
+                placeShipsFront()
+                importAsteroids()
+                hasRendered = true 
+            }
+        case "i" :
+            //deinitialize status bar
+            remove(entity:statusBar)
+            //this resets all of the game variables so that it can be played again
+            ship1Lives = 3
+            ship2Lives = 3
+            ship1Rotate = 0.0
+            ship2Rotate = 180.0
+            ship1Color = Color(.white)
+            ship2Color = Color(.white)
+            hasColored = false
+            red = false
+            green = false
+            yellow = false
+            blue = false
+            timeAmount = "5:00"
+            hasRendered = false
+            asteroid = []
+            asteroidRects = []
+            gameEnded = false
+            gameWin = 0
+            //reinitialize status bar
+            statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+            startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
+            insert(entity:startingScreen, at:.front)
+        default:
+            break
         }
         if (ship1Rotate < 0.0) {
             ship1Rotate += 360.0
@@ -349,6 +396,11 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
         winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
+        neptuneBackground = NeptuneBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        mercuryBackground = MercuryBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        saturnBackground = SaturnBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
+        starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
 
         super.init(name:"Interaction")
     }
@@ -360,6 +412,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
         self.canvasSize = canvasSize
+        insert(entity:startingScreen, at:.back)
         insert(entity:winnerScreen, at:.front)
         
         dispatcher.registerKeyDownHandler(handler: self)
