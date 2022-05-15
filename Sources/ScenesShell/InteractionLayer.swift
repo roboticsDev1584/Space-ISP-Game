@@ -93,7 +93,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             safe = false
             while safe == false {
                 centerX = Int.random(in:canvasSize.center.x-400 ... canvasSize.center.x+400)
-                centerY = Int.random(in:canvasSize.center.y-400 ... canvasSize.center.y+400)
+                centerY = Int.random(in:canvasSize.center.y-300 ... canvasSize.center.y+300)
                 radius = Int.random(in:40 ... 100)
                 let renderedAsteroid = Asteroids(centerX:centerX,centerY:centerY,radius:radius,asteroids:asteroid)
                 if renderedAsteroid.boundaries() == true {
