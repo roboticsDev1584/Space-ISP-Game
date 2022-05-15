@@ -39,7 +39,7 @@ class StartingScreen : RenderableEntity {
         }
         canvas.render(fillStyle, text)
 
-        text = Text(location:Point(x:canvasSize.center.x-190,y:canvasSize.center.y+250), text:"Press Enter To Start")
+        text = Text(location:Point(x:canvasSize.center.x-150,y:canvasSize.center.y+250), text:"Press Enter To Start")
         text.font = "30pt megrim"
         canvas.render(text)
     }

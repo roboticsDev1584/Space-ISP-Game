@@ -50,12 +50,12 @@ class WinnerScreen : RenderableEntity {
             canvas.render(rectFillStyle, thing)
             //Win text
             let fill = FillStyle(color:textColor)
-            let words = Text(location:Point(x:canvasSize.center.x-250,y:canvasSize.center.y), text:winText)
+            let words = Text(location:Point(x:canvasSize.center.x-300,y:canvasSize.center.y), text:winText)
             words.font = "80pt Callout"
             canvas.render(fill, words)
             //Rematch text
             let fill1 = FillStyle(color:Color(.white))
-            let words1 = Text(location:Point(x:canvasSize.center.x-190,y:canvasSize.center.y+100), text:"Rematch? Press I.")
+            let words1 = Text(location:Point(x:canvasSize.center.x-240,y:canvasSize.center.y+100), text:"Rematch? Press I.")
             words1.font = "50pt Callout"
             canvas.render(fill1, words1)
         }
