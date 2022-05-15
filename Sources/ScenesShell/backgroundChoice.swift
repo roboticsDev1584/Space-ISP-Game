@@ -33,19 +33,19 @@ class ChooseMap : RenderableEntity {
         words.font = "80pt Megrim"
         canvas.render(fillStyle, words)
 
-        let words1 = Text(location:Point(x:150,y:200), text:"Each setting has unique features which effects the gameplay")
+        let words1 = Text(location:Point(x:canvasSize.center.x-800,y:200), text:"Each setting has unique features which effects the gameplay")
         words1.font = "50pt Josefin Sans"
         canvas.render(words1)
 
-        let words2 = Text(location:Point(x:canvasSize.center.x-450, y:300), text:"Saturn (Press f)")
+        let words2 = Text(location:Point(x:canvasSize.center.x-150, y:300), text:"Saturn (Press f)")
         words2.font = "45pt Josefin Sans"
         canvas.render(words2)
 
-        let words3 = Text(location:Point(x:canvasSize.center.x-470, y:400), text:"Neptune: Ships freeze after 1 minute (Press n)")
+        let words3 = Text(location:Point(x:canvasSize.center.x-570, y:400), text:"Neptune: Ships freeze after 1 minute (Press n)")
         words3.font = "45pt Josefin Sans"
         canvas.render(words3)
 
-        let words4 = Text(location:Point(x:canvasSize.center.x-675, y:500), text:"Mercury: Ships melt after 1 minute and 30 seconds (Press m)")
+        let words4 = Text(location:Point(x:canvasSize.center.x-725, y:500), text:"Mercury: Ships melt after 1 minute and 30 seconds (Press m)")
         words4.font = "45pt Josefin Sans"
         canvas.render(words4)
 

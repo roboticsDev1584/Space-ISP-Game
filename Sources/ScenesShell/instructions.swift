@@ -29,19 +29,19 @@ class instructions : RenderableEntity {
         words.font = "80pt megrim"
         canvas.render(fillStyle, words)
 
-        let words1 = Text(location:Point(x:650,y:200), text:"Each player has 3 lives, and the player who loses all their lives first or has the least amount of lives after time runs out loses.")
+        let words1 = Text(location:Point(x:canvasSize.center.x-660,y:200), text:"Each player has 3 lives, the last player standing or the players with more lives wins.")
         words1.font = "30pt megrim"
         canvas.render(words1)
 
-        let words2 = Text(location:Point(x:200, y:300), text:"Once hit with the other player's projectile or with an asteroid the player loses a life.")
+        let words2 = Text(location:Point(x:canvasSize.center.x-650, y:300), text:"Once hit with the other player's projectile or with an asteroid the player loses a life.")
         words2.font = "30pt megrim"
         canvas.render(words2)
 
-        let words3 = Text(location:Point(x:10, y:400), text:"Player 1 use w to move forward, s to move backwards, a to rotate left, d to rotate right, and r to fire.")
+        let words3 = Text(location:Point(x:canvasSize.center.x-800, y:400), text:"Player 1 use w to move forward, s to move backwards, a to rotate left, d to rotate right, and r to fire.")
         words3.font = "30pt megrim"
         canvas.render(words3)
 
-        let words4 = Text(location:Point(x:10, y:500), text:"Player 2 use the mouse to move around the screen and left mouse click to shoot.")
+        let words4 = Text(location:Point(x:canvasSize.center.x-800, y:500), text:"Player 2 use the mouse to move around the screen and left mouse click to shoot.")
         words4.font = "30pt megrim"
     }
 }
