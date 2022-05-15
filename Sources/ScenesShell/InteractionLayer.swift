@@ -70,16 +70,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.rotation = ship2Rotate
         ship1.color = ship1Color
         ship2.color = ship2Color
-        //manage termination of projectiles
-        //get an array of projectiles that have terminated
-        /*let terminatedArray = projectiles.filter { $0.terminate }
-        for index in 0 ..< terminatedArray.count {
-            //this should deinitialize the object, don't need b/c I can restart the game now
-            //remove(entity:terminatedArray[index])
-        }
-        //update the projectiles array to only live projectiles, continue here
-        projectiles = projectiles.filter { !$0.terminate }*/
-        //print("Projectiles \(projectiles)")
     }
 
     func hasColor(Colored:Bool) {
@@ -238,7 +228,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
         case "o" :
             if (!colored1 && hasInstructions)  {
-                ship1Color = Color(.blue)
+                ship1Color = Color(red:124,green:185,blue:232)
                 blue = true
                 colored1 = true
                 insert(entity:player2, at:.front)
@@ -270,7 +260,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
         case "l" :
             if (blue == false && colored1 && !hasColored && !hasRendered) {
-                ship2Color = Color(.blue)
+                ship2Color = Color(red:124,green:185,blue:232)
                 insert(entity:backgroundChoice, at:.front)
                 warning.terminate = true
                 hasColor(Colored:true) 
@@ -359,31 +349,6 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true 
             }
-        /*case "i" :
-            //deinitialize status bar
-            remove(entity:statusBar)
-            //this resets all of the game variables so that it can be played again
-            ship1Lives = 3
-            ship2Lives = 3
-            ship1Rotate = 0.0
-            ship2Rotate = 180.0
-            ship1Color = Color(.white)
-            ship2Color = Color(.white)
-            hasColored = false
-            red = false
-            green = false
-            yellow = false
-            blue = false
-            timeAmount = "5:00"
-            hasRendered = false
-            asteroid = []
-            asteroidRects = []
-            projectiles = []
-            gameEnded = false
-            gameWin = 0
-            //reinitialize status bar
-            statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
-            insert(entity:startingScreen, at:.front)*/
         default:
             break
         }
@@ -403,19 +368,21 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     }
    
     init() {
-        statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
+        statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives, p1Color:&ship1Color, p2Color:&ship2Color)
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue),blHoleStr:&blackHoleStrength)
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green),blHoleStr:&blackHoleStrength)
-        winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
-        starBackground = StarBackground(waitStar:30,changeStar:30,waitRedGiant:30,changeRedGiant:30,waitSupernova:30,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0,blHoleStr:&blackHoleStrength)
+        winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin, p1Color:&ship1Color, p2Color:&ship2Color)
+        starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0,blHoleStr:&blackHoleStrength)
 
         super.init(name:"Interaction")
     }
+    
     //self destruct on restart
     deinit {
         
     }
-    override func preSetup(canvasSize:Size, canvas:Canvas) {        
+    
+    override func preSetup(canvasSize:Size, canvas:Canvas) {
         //move ships to starting positions
         ship1X = 60
         ship2X = canvasSize.width - 90
@@ -424,12 +391,12 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         updateShipPositions()
         self.canvasSize = canvasSize
         insert(entity:startingScreen, at:.back)
-        insert(entity:winnerScreen, at:.front)
-        
+        insert(entity:winnerScreen, at:.front)    
         dispatcher.registerKeyDownHandler(handler: self)
         dispatcher.registerMouseMoveHandler(handler: self)
         dispatcher.registerMouseDownHandler(handler:self)
     }
+    
     override func postTeardown() {
         dispatcher.unregisterKeyDownHandler(handler: self)
         dispatcher.unregisterMouseMoveHandler(handler: self)

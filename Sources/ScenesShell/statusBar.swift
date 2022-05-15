@@ -16,18 +16,23 @@ class StatusBar : RenderableEntity {
     var timePointer : UnsafeMutablePointer<String>
     var p1LifePointer : UnsafeMutablePointer<Int>
     var p2LifePointer : UnsafeMutablePointer<Int>
-    var p1Address : Int
-    var p2Address : Int
+    var p1ColorPointer : UnsafeMutablePointer<Color>
+    var p2ColorPointer : UnsafeMutablePointer<Color>
+
+    var p1LifeColor = Color(.white)
+    var p2LifeColor = Color(.white)
 
     //need some way to indicate to InteractionLayer.swift that the game has ended
-    init(timer:inout String, endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int) {
+    init(timer:inout String, endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int, p1Color:inout Color, p2Color:inout Color) {
         timePointer = .init(&timer)
         endPointer = .init(&endVar)
         winPointer = .init(&winVar)
+
         p1LifePointer = .init(&p1Life)
         p2LifePointer = .init(&p2Life)
-        p1Address = p1Life
-        p2Address = p2Life
+        p1ColorPointer = .init(&p1Color)
+        p2ColorPointer = .init(&p2Color)
+        
         super.init(name:"StatusBar")
     }
 
@@ -39,44 +44,14 @@ class StatusBar : RenderableEntity {
     override func render(canvas:Canvas) {
         let canvasSize = canvas.canvasSize!
 
-        //make sure that lives are reset properly on first execution
-        //if (count == 0) {
-        //    p1LifePointer.pointee = 3
-        //    p2LifePointer.pointee = 3
-        //}
-
-        //this securely creates a pointer that updates the life value
-        //if ((p1LifePointer.pointee > 0) && (p2LifePointer.pointee > 0)) {
-        let testing = withUnsafeMutablePointer(to: &p1Address) { response -> Int in
-            /*var p1LifePointer = UnsafeMutablePointer<Int>.allocate(capacity:1)
-            p1LifePointer.initialize(from:&p1Address, count:1)
-            p1LifePointer.pointee = 3*/
-            let test = response.pointee
-            //player1Life = response.pointee
-            //print("Changed life value1")
-            //print("Response: \(response.pointee)")
-            return test
-        }
-        //print(testing)
-        let testing2 = withUnsafeMutablePointer(to: &p2Address) { response -> Int in 
-            /*var p2LifePointer = UnsafeMutablePointer<Int>.allocate(capacity:1)
-            p2LifePointer.initialize(from:&p2Address, count:1)
-            p2LifePointer.pointee = 3*/
-            //player2Life = response.pointee
-            let test = response.pointee
-            //print(player2Life)
-            //print("Changed life value2")
-            //print("Response: \(response)")
-            return test
-        }
-        //print(testing2)
-        //print("p2Life: \(player2Life)")
+        //get current player colors
+        p1LifeColor = p1ColorPointer.pointee
+        p2LifeColor = p2ColorPointer.pointee
+        //get current player lives
         player1Life = p1LifePointer.pointee
         player2Life = p2LifePointer.pointee
-        //}
         
         time = timePointer.pointee
-        //print("p2Life \(player2Life)")
         
         //every 30 executions, 1 second elapses
         if (count == 30) {
@@ -123,18 +98,20 @@ class StatusBar : RenderableEntity {
         }
         if (!end) {
         //render banner text
-        let fillStyle = FillStyle(color:Color(.white))
+        let fill = FillStyle(color:p1LifeColor)
         let words = Text(location:Point(x:25,y:50), text:"P1 Lives: \(player1Life)")
         words.font = "30pt Callout"
-        canvas.render(fillStyle, words)
+        canvas.render(fill, words)
 
+        let fill1 = FillStyle(color:Color(.white))
         let wordsTime = Text(location:Point(x:canvasSize.center.x-200,y:50), text:"Time Remaining: \(time)")
         wordsTime.font = "30pt Callout"
-        canvas.render(wordsTime)
-        
+        canvas.render(fill1, wordsTime)
+
+        let fill2 = FillStyle(color:p2LifeColor)
         let words1 = Text(location:Point(x:canvasSize.width-225,y:50), text:"P2 Lives: \(player2Life)")
         words1.font = "30pt Callout"
-        canvas.render(words1)
+        canvas.render(fill2, words1)
         }
         else {
             //deletes the banner
