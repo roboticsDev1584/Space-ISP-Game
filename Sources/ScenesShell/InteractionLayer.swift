@@ -6,6 +6,9 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var hasRendered = false
 
     var hasColored = false
+    var colored1 = false //shows if p1 has chosen a color
+    var hasEntered = false //shows if enter has been pressed on start screen
+    var hasInstructions = false //shows if e has been pressed on instructions screen
     var red = false
     var green = false
     var yellow = false
@@ -26,8 +29,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var ship2Y = 0
     var ship1Rotate = 0.0
     var ship2Rotate = 180.0
-    var ship1FireVelocity = 6.0
-    var ship2FireVelocity = 6.0
+    var ship1FireVelocity = 5.0
+    var ship2FireVelocity = 5.0
     var ship1Color = Color(.white)
     var ship2Color = Color(.white)
     var prevShip1Key = ""
@@ -68,13 +71,13 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.color = ship2Color
         //manage termination of projectiles
         //get an array of projectiles that have terminated
-        let terminatedArray = projectiles.filter { $0.terminate }
+        /*let terminatedArray = projectiles.filter { $0.terminate }
         for index in 0 ..< terminatedArray.count {
-            //this should deinitialize the object
-            remove(entity:terminatedArray[index])
+            //this should deinitialize the object, don't need b/c I can restart the game now
+            //remove(entity:terminatedArray[index])
         }
         //update the projectiles array to only live projectiles, continue here
-        projectiles = projectiles.filter { !$0.terminate }
+        projectiles = projectiles.filter { !$0.terminate }*/
         //print("Projectiles \(projectiles)")
     }
 
@@ -218,71 +221,87 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             insert(entity:projectile, at:.front)    
             insert(entity:winnerScreen, at:.front)
         case "Enter" :
-            insert(entity:Instructions, at:.front)
+            if (!hasEntered) {
+                insert(entity:Instructions, at:.front)
+                hasEntered = true
+            }
         case "e" :
-            insert(entity:player1, at:.front)
-            placeShipsFront()
-            ship1X = 60
-            ship2X = canvasSize.width - 90
-            ship1Y = (canvasSize.height / 2)
-            ship2Y = (canvasSize.height / 2)
+            if (!hasInstructions && hasEntered) {
+                insert(entity:player1, at:.front)
+                placeShipsFront()
+                ship1X = 60
+                ship2X = canvasSize.width - 90
+                ship1Y = (canvasSize.height / 2)
+                ship2Y = (canvasSize.height / 2)
+                hasInstructions = true
+            }
         case "o" :
-            if hasColored == false {
+            if (!colored1 && hasInstructions)  {
                 ship1Color = Color(.blue)
                 blue = true
+                colored1 = true
                 insert(entity:player2, at:.front)
                 placeShipsFront()
             }
         case "u" :
-            if hasColored == false {
+            if (!colored1 && hasInstructions) {
                 ship1Color = Color(.green)
                 green = true
+                colored1 = true
                 insert(entity:player2, at:.front)
                 placeShipsFront()
             }
         case "t" :
-            if hasColored == false {
+            if (!colored1 && hasInstructions) {
                 ship1Color = Color(.red)
                 red = true
+                colored1 = true
                 insert(entity:player2, at:.front)
                 placeShipsFront()
             }
         case "v" :
-            if hasColored == false { 
+            if (!colored1 && hasInstructions) { 
                 ship1Color = Color(.yellow)
                 yellow = true
+                colored1 = true
                 insert(entity:player2, at:.front)
                 placeShipsFront()
             }
         case "l" :
-            if blue == false {
+            if (blue == false && colored1 && !hasColored && !hasRendered) {
                 ship2Color = Color(.blue)
                 insert(entity:backgroundChoice, at:.front)
                 warning.terminate = true
                 hasColor(Colored:true) 
+            } else if (!colored1) {
+                //don't allow the user to continue without selecting a player 1 color
             } else {
                 if hasColored == false {
                     insert(entity:warning, at:.front)
                 }
             }
         case "g" :
-            if green == false {
+            if (green == false && colored1 && !hasColored && !hasRendered) {
                 ship2Color = Color(.green)
                 insert(entity:backgroundChoice, at:.front)
                 warning.terminate = true
                 hasColor(Colored:true) 
-            } else  {
+            } else if (!colored1) {
+                //don't allow the user to continue without selecting a player 1 color
+            } else {
                 if hasColored == false {
                     insert(entity:warning, at:.front)
                 }
             }
             
         case "h" :
-            if red == false {
+            if (red == false && colored1 && !hasColored && !hasRendered) {
                 ship2Color = Color(.red)
                 insert(entity:backgroundChoice, at:.front)
                 warning.terminate = true
                 hasColor(Colored:true) 
+            } else if (!colored1) {
+                //don't allow the user to continue without selecting a player 1 color
             } else {
                 if hasColored == false {
                     insert(entity:warning, at:.front)
@@ -290,19 +309,20 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
             
         case "k" :
-            if yellow == false {
+            if (yellow == false && colored1 && !hasColored && !hasRendered) {
                 ship2Color = Color(.yellow)
                 insert(entity:backgroundChoice, at:.front)
                 warning.terminate = true
                 hasColor(Colored:true) 
+            } else if (!colored1) {
+                //don't allow the user to continue without selecting a player 1 color
             } else {
                 if hasColored == false {
                     insert(entity:warning, at:.front)
                 }
             }
-            
         case "n" :
-            if hasRendered == false {
+            if (hasRendered == false && hasColored) {
                 insert(entity:neptuneBackground, at:.front)
                 timeAmount = "2:00"
                 insert(entity:statusBar, at:.front)
@@ -311,25 +331,25 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 hasRendered = true
             }
         case "m" :
-            if hasRendered == false {
+            if (hasRendered == false && hasColored) {
                 insert(entity:mercuryBackground, at:.front)
                 timeAmount = "1:30"
                 insert(entity:statusBar, at:.front)
                 placeShipsFront()
                 importAsteroids()
-                hasRendered = true 
+                hasRendered = true
             }
         case "f" :
-            if hasRendered == false {
+            if (hasRendered == false && hasColored) {
                 insert(entity:saturnBackground, at:.front)
                 timeAmount = "5:00"
                 insert(entity:statusBar, at:.front)
                 placeShipsFront()
                 importAsteroids()
-                hasRendered = true 
+                hasRendered = true
             }
         case "y" :
-            if hasRendered == false {
+            if (hasRendered == false && hasColored) {
                 insert(entity:starBackground, at:.front)
                 starBackground.begin()
                 timeAmount = "1:00"
