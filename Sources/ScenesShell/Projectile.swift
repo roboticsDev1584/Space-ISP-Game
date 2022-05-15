@@ -26,6 +26,7 @@ class Projectile : RenderableEntity {
     var ship2YPointer : UnsafeMutablePointer<Int>
     var lives1Pointer : UnsafeMutablePointer<Int>
     var lives2Pointer : UnsafeMutablePointer<Int>
+    var p2Address : Int
 
     
     init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int, rects:[Rect]) {        
@@ -50,6 +51,7 @@ class Projectile : RenderableEntity {
         ship2XPointer = .init(&ship2X)
         ship1YPointer = .init(&ship1Y)
         ship2YPointer = .init(&ship2Y)
+        p2Address = p2Lives
 
         //get the current life data from a pointer
         lives1Pointer = .init(&p1Lives)
@@ -66,6 +68,7 @@ class Projectile : RenderableEntity {
     }
     
     override func render(canvas:Canvas) {
+        //print(lives2Pointer.pointee)
         //calculate the velocity for the projectile based on rotation of ship
         let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))
         let fireVelocityY = -Int(fireVelocity * sin(degree * Double.pi / 180.0))
@@ -74,22 +77,26 @@ class Projectile : RenderableEntity {
         projectile.center += Point(x:(fireVelocityX * fireVelocityXSign), y:(fireVelocityY * fireVelocityYSign))
         
         //set the sensitivity for hitting the other player
-        let rangeVal = 10
+        let rangeVal = 16 //used to be 10
 
         if (((projectile.center.x >= (ship1XPointer.pointee - rangeVal) && projectile.center.x <= (ship1XPointer.pointee + rangeVal)) && (projectile.center.y >= (ship1YPointer.pointee - rangeVal) && projectile.center.y <= (ship1YPointer.pointee + rangeVal))) && !terminate) {
-            terminate = true
             //player 1 loses one life
             lives1 -= 1
+            terminate = true
         }
         //if projectile hits player 2
         else if (((projectile.center.x >= (ship2XPointer.pointee - rangeVal) && projectile.center.x <= (ship2XPointer.pointee + rangeVal)) && (projectile.center.y >= (ship2YPointer.pointee - rangeVal) && projectile.center.y <= (ship2YPointer.pointee + rangeVal))) && !terminate) {
-            terminate = true
             //player 2 loses one life
             lives2 -= 1
+            terminate = true
         }
 
         //set the current life data using pointers
         lives1Pointer.pointee = lives1
+        /*withUnsafeMutablePointer(to:&p2Address) { response in 
+            response.pointee = lives2
+            print(response.pointee)
+        }*/
         lives2Pointer.pointee = lives2
 
         //use containment to know when the projectile needs to change direction

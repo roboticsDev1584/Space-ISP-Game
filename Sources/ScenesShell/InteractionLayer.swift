@@ -42,14 +42,14 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var gameWin = 0
     var projectiles : [Projectile] = []
 
-    var neptuneBackground : NeptuneBackground
-    var mercuryBackground : MercuryBackground
-    var saturnBackground : SaturnBackground
+    let neptuneBackground = NeptuneBackground()
+    let mercuryBackground = MercuryBackground()
+    let saturnBackground = SaturnBackground()
     let backgroundChoice = ChooseMap()
     //conversion: 30 = 1 second
-    var starBackground : StarBackground
+    let starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0)
 
-    var startingScreen : StartingScreen
+    let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
     let Instructions = instructions()
@@ -75,6 +75,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         }
         //update the projectiles array to only live projectiles, continue here
         projectiles = projectiles.filter { !$0.terminate }
+        //print("Projectiles \(projectiles)")
     }
 
     func hasColor(Colored:Bool) {
@@ -337,7 +338,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true 
             }
-        case "i" :
+        /*case "i" :
             //deinitialize status bar
             remove(entity:statusBar)
             //this resets all of the game variables so that it can be played again
@@ -356,12 +357,12 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             hasRendered = false
             asteroid = []
             asteroidRects = []
+            projectiles = []
             gameEnded = false
             gameWin = 0
             //reinitialize status bar
             statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives)
-            startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
-            insert(entity:startingScreen, at:.front)
+            insert(entity:startingScreen, at:.front)*/
         default:
             break
         }
@@ -385,13 +386,12 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue))
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green))
         winnerScreen = WinnerScreen(endVar:&gameEnded, winVar:&gameWin)
-        neptuneBackground = NeptuneBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
-        mercuryBackground = MercuryBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
-        saturnBackground = SaturnBackground(p1Life:&ship1Lives, p2Life:&ship2Lives)
-        starBackground = StarBackground(waitStar:120,changeStar:120,waitRedGiant:120,changeRedGiant:120,waitSupernova:80,enlargeBlackHole:120,starTargetMultiplier:1.6,redGiantTargetMultiplier:3.0,blackHoleTargetMultiplier:10.0, p1Life:&ship1Lives, p2Life:&ship2Lives)
-        startingScreen = StartingScreen(p1Life:&ship1Lives, p2Life:&ship2Lives)
 
         super.init(name:"Interaction")
+    }
+    //self destruct on restart
+    deinit {
+        
     }
     override func preSetup(canvasSize:Size, canvas:Canvas) {        
         //move ships to starting positions
