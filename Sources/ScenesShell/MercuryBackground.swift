@@ -33,7 +33,7 @@ class MercuryBackground : RenderableEntity {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
         //form the image url
-        guard let mercuryURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Mercury_transit_2.jpg/600px-Mercury_transit_2.jpg") else {
+        guard let mercuryURL = URL(string:"https://scx2.b-cdn.net/gfx/news/hires/2015/whatsimporta.jpg") else {
             fatalError("Failed to create neptune URL")
         }
         //form the image object
