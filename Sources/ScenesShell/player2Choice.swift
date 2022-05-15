@@ -23,7 +23,7 @@ class Player2Choose : RenderableEntity {
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
         }
-        let fillStyle = FillStyle(color:Color(.white))
+        let fill = FillStyle(color:Color(.white))
         let words = Text(location:Point(x:canvasSize.center.x-680,y:100), text:"Player 2 choose your ship color")
         words.font = "80pt Callout"
         canvas.render(fill, words)
