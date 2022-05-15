@@ -37,8 +37,8 @@ class instructions : RenderableEntity {
         words2.font = "30pt megrim"
         canvas.render(words2)
 
-        let words3 = Text(location:Point(x:canvasSize.center.x-800, y:400), text:"Player 1 use w to move forward, s to move backwards, a to rotate left, d to rotate right, and r to fire.")
-        words3.font = "30pt megrim"
+        let words3 = Text(location:Point(x:canvasSize.center.x-770, y:400), text:"Player 1 use w to move forward, s to move backwards, a to rotate left, d to rotate right, and r to fire.")
+        words3.font = "29pt megrim"
         canvas.render(words3)
 
         let words4 = Text(location:Point(x:canvasSize.center.x-650, y:500), text:"Player 2 use the mouse to move around the screen and left mouse click to shoot.")
