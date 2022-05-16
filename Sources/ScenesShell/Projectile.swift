@@ -28,6 +28,8 @@ class Projectile : RenderableEntity {
     var lives2Pointer : UnsafeMutablePointer<Int>
     var p2Address : Int
 
+    let fireAudio : Audio
+    var firstRun = true
     
     init(x:Int, y:Int, degree:Double, fireVelocity:Double, shipColor:Color, ship1X:inout Int, ship2X:inout Int, ship1Y:inout Int, ship2Y:inout Int, p1Lives:inout Int, p2Lives:inout Int, rects:[Rect]) {        
         //initialize the projectile object
@@ -40,6 +42,12 @@ class Projectile : RenderableEntity {
         self.degree = degree
         self.terminate = false
         self.asteroidRects = rects
+
+        //set up projectile sound
+        guard let soundURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/ProjectileFire.mp3") else {
+            fatalError("Failed to create URL for audio")
+        }
+        fireAudio = Audio(sourceURL:soundURL)
 
         //initialize asteroidRectsSides array
         for index2 in 0 ..< asteroidRects.count {
@@ -66,8 +74,18 @@ class Projectile : RenderableEntity {
     deinit {
         
     }
+
+    override func setup(canvasSize:Size, canvas:Canvas) {
+        canvas.setup(fireAudio)
+    }
     
     override func render(canvas:Canvas) {
+        //play fire audio as soon as possible
+        if (fireAudio.isReady && firstRun) {
+            canvas.render(fireAudio)
+            firstRun = false
+        }
+        
         //print(lives2Pointer.pointee)
         //calculate the velocity for the projectile based on rotation of ship
         let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))

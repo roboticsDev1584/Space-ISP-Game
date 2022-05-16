@@ -12,6 +12,7 @@ class StartingScreen : RenderableEntity {
     var ratio : Double
     //initialize game audio
     let gameAudio : Audio
+    var firstRun = true
     
     init() {
         // Using a meaningful name can be helpful for debugging
@@ -30,7 +31,7 @@ class StartingScreen : RenderableEntity {
         guard let audioURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/Game_Audio.mp3") else {
             fatalError("Failed to create URL for whitehouse")
         }
-        gameAudio = Audio(sourceURL:audioURL, shouldLoop:true)
+        gameAudio = Audio(sourceURL:audioURL, shouldLoop:false)
         self.ratio = 0
         
         super.init(name:"StartingScreen")
@@ -44,8 +45,9 @@ class StartingScreen : RenderableEntity {
     }
     override func render(canvas:Canvas) {
         //play game audio
-        if gameAudio.isReady {
+        if (gameAudio.isReady && firstRun) {
             canvas.render(gameAudio)
+            firstRun = false
         }
         
         let canvasSize = canvas.canvasSize!
