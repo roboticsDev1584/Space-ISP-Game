@@ -1,6 +1,6 @@
-import Scenes
-import Igis
 import Foundation
+import Igis
+import Scenes
 
 class StatusBar : RenderableEntity {
     var player1Life = 3
@@ -97,21 +97,21 @@ class StatusBar : RenderableEntity {
             win = 1
         }
         if (!end) {
-        //render banner text
-        let fill = FillStyle(color:p1LifeColor)
-        let words = Text(location:Point(x:25,y:50), text:"P1 Lives: \(player1Life)")
-        words.font = "30pt Callout"
-        canvas.render(fill, words)
+            //render banner text
+            let fill = FillStyle(color:p1LifeColor)
+            let words = Text(location:Point(x:25,y:50), text:"P1 Lives: \(player1Life)")
+            words.font = "30pt Callout"
+            canvas.render(fill, words)
 
-        let fill1 = FillStyle(color:Color(.white))
-        let wordsTime = Text(location:Point(x:canvasSize.center.x-200,y:50), text:"Time Remaining: \(time)")
-        wordsTime.font = "30pt Callout"
-        canvas.render(fill1, wordsTime)
+            let fill1 = FillStyle(color:Color(.white))
+            let wordsTime = Text(location:Point(x:canvasSize.center.x-200,y:50), text:"Time Remaining: \(time)")
+            wordsTime.font = "30pt Callout"
+            canvas.render(fill1, wordsTime)
 
-        let fill2 = FillStyle(color:p2LifeColor)
-        let words1 = Text(location:Point(x:canvasSize.width-225,y:50), text:"P2 Lives: \(player2Life)")
-        words1.font = "30pt Callout"
-        canvas.render(fill2, words1)
+            let fill2 = FillStyle(color:p2LifeColor)
+            let words1 = Text(location:Point(x:canvasSize.width-225,y:50), text:"P2 Lives: \(player2Life)")
+            words1.font = "30pt Callout"
+            canvas.render(fill2, words1)
         }
         else {
             //deletes the banner

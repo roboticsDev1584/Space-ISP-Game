@@ -1,6 +1,6 @@
+import Foundation
 import Igis
 import Scenes
-import Foundation
 
 class Ships: RenderableEntity {
     
@@ -49,7 +49,7 @@ class Ships: RenderableEntity {
         //recreate the ship object
         let r = 26.0
         let turretLength = 14.0
-          
+        
         fillStyle = FillStyle(color:color)
         lines = Path(fillMode:.fillAndStroke)
 
@@ -143,6 +143,6 @@ class Ships: RenderableEntity {
 
         canvas.render(lineWidth, strokeStyle, fillStyle, lines)
 
-        }
+    }
 
 }

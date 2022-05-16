@@ -1,6 +1,6 @@
 import Foundation
-import Scenes
 import Igis
+import Scenes
 
 class StarBackground : RenderableEntity {
 
@@ -119,7 +119,7 @@ class StarBackground : RenderableEntity {
         canvas.setup(supernova)
         canvas.setup(blackHole)
         canvas.setup(stars)
-    
+        
         canvasSizeC = canvasSize
     }
     override func render(canvas:Canvas) {

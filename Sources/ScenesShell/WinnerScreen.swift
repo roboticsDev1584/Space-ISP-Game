@@ -1,6 +1,6 @@
-import Scenes
-import Igis
 import Foundation
+import Igis
+import Scenes
 
 class WinnerScreen : RenderableEntity {
     var winText : String
@@ -62,5 +62,5 @@ class WinnerScreen : RenderableEntity {
         else {
             canvas.render()
         }
-        }
+    }
 }

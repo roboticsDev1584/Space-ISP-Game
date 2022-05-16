@@ -1,6 +1,6 @@
-import Scenes
-import Igis
 import Foundation
+import Igis
+import Scenes
 
 class StartingScreen : RenderableEntity {
     var text : Text
