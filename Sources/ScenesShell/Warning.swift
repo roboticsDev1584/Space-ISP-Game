@@ -5,7 +5,7 @@ class Warning: RenderableEntity {
     var warning : Text
     var terminate = false 
     init() {
-        warning = Text(location:Point(x:50, y:50), text:"Hello, World!")
+        warning = Text(location:Point(x:50, y:50), text:"")
         super.init(name:"Warning")
     }
 
