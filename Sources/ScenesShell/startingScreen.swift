@@ -10,6 +10,8 @@ class StartingScreen : RenderableEntity {
     var lifeChange2 = 0
 
     var ratio : Double
+    //initialize game audio
+    let gameAudio : Audio
     
     init() {
         // Using a meaningful name can be helpful for debugging
@@ -18,6 +20,17 @@ class StartingScreen : RenderableEntity {
             fatalError("failed to load backgroundURL")
         }
         background = Image(sourceURL:backgroundURL)
+        //set up game audio, audio credits: need to figure out why game audio breaks the pointers
+        /*
+         Aggressive Computer Gaming | ENIGMA by Alex-Productions | https://www.youtube.com/channel/UCx0_M61F81Nfb-BRXE-SeVA
+         Music promoted by https://www.chosic.com/free-music/all/
+         Creative Commons CC BY 3.0
+         https://creativecommons.org/licenses/by/3.0/
+         */
+        guard let audioURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/Game_Audio.mp3") else {
+            fatalError("Failed to create URL for whitehouse")
+        }
+        gameAudio = Audio(sourceURL:audioURL, shouldLoop:true)
         self.ratio = 0
         
         super.init(name:"StartingScreen")
@@ -27,8 +40,14 @@ class StartingScreen : RenderableEntity {
         //render background
         ratio = (80.0/Double(canvasSize.width))
         canvas.setup(background)
+        canvas.setup(gameAudio)
     }
     override func render(canvas:Canvas) {
+        //play game audio
+        if gameAudio.isReady {
+            canvas.render(gameAudio)
+        }
+        
         let canvasSize = canvas.canvasSize!
         
         let fillStyle = FillStyle(color:Color(.white))

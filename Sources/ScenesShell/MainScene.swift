@@ -1,11 +1,11 @@
-import Scenes
 import Igis
+import Scenes
 
 class MainScene : Scene, KeyDownHandler {
     let backgroundLayer = BackgroundLayer()
     var interactionLayer = InteractionLayer()
     let foregroundLayer = ForegroundLayer()
-
+    
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         //tell the game to restart when the user presses "I"
         if (key == "i") {
@@ -15,7 +15,7 @@ class MainScene : Scene, KeyDownHandler {
         } 
     }
     
-    init() {
+    init() {    
         super.init(name:"Main")
         
         insert(layer:backgroundLayer, at:.back)
