@@ -1,6 +1,6 @@
 import Foundation
-import Scenes
 import Igis
+import Scenes
 
 class SaturnBackground : RenderableEntity {
 

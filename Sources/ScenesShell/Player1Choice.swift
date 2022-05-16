@@ -1,6 +1,6 @@
-import Scenes
-import Igis
 import Foundation
+import Igis
+import Scenes
 
 class Player1Choose : RenderableEntity {
     let background : Image

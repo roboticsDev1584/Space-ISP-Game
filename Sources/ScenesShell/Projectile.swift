@@ -112,9 +112,9 @@ class Projectile : RenderableEntity {
         //set the current life data using pointers
         lives1Pointer.pointee = lives1
         /*withUnsafeMutablePointer(to:&p2Address) { response in 
-            response.pointee = lives2
-            print(response.pointee)
-        }*/
+          response.pointee = lives2
+          print(response.pointee)
+          }*/
         lives2Pointer.pointee = lives2
 
         //use containment to know when the projectile needs to change direction

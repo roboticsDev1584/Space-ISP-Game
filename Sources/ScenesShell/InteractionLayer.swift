@@ -1,6 +1,6 @@
+import Igis
 import Foundation
 import Scenes
-import Igis
 
 class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandler {
     var hasRendered = false

@@ -1,6 +1,6 @@
-import Scenes
-import Igis
 import Foundation
+import Igis
+import Scenes
 
 class ChooseMap : RenderableEntity {
     let background : Image

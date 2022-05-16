@@ -1,5 +1,5 @@
-import Scenes
 import Igis
+import Scenes
 
 class Asteroids: RenderableEntity {
     var centerX : Int
@@ -22,7 +22,7 @@ class Asteroids: RenderableEntity {
         fillStyle = FillStyle(color:Color(red:105, green:99, blue:94))
         strokeStyle = StrokeStyle(color:Color(red:66, green:62, blue:59))
         lineWidth = LineWidth(width: 5)
-           
+        
         super.init(name:"Asteroids")
     }
 
