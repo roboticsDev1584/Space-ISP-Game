@@ -3,26 +3,29 @@ import Foundation
 import Scenes
 
 class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandler {
+    //initialize screen logic variables
     var hasRendered = false
-
     var hasColored = false
-    var colored1 = false //shows if p1 has chosen a color
-    var hasEntered = false //shows if enter has been pressed on start screen
-    var hasInstructions = false //shows if e has been pressed on instructions screen
+    var colored1 = false 
+    var hasEntered = false
+    var hasInstructions = false
     var red = false
     var green = false
     var yellow = false
     var blue = false 
     var warning = Warning()
-    
+
+    //set up asteroid arrays and canvas size variable
     var asteroid : [Point] = []
     var asteroidRects : [Rect] = []
     var asteroidPoint = Point(x:0,y:0)
     var canvasSize = Size(width:0,height:0)
-    
+
+    //set up ship objects
     var ship1 : Ships
     var ship2 : Ships
 
+    //initialize ship property variables
     var ship1X = 0
     var ship2X = 0
     var ship1Y = 0
@@ -36,6 +39,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var prevShip1Key = ""
     var prevShip2Key = ""
 
+    //intialize game property variables
     let moveAmount = 5.0
     let turnAmount = 3.0
     var timeAmount = "5:00"
@@ -46,13 +50,14 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var gameWin = 0
     var projectiles : [Projectile] = []
 
+    //initialize maps
     let neptuneBackground = NeptuneBackground()
     let mercuryBackground = MercuryBackground()
     let saturnBackground = SaturnBackground()
     let backgroundChoice = ChooseMap()
-    //conversion: 30 = 1 second
     var starBackground : StarBackground
 
+    //initialize game screens
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
@@ -60,8 +65,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     var statusBar : StatusBar
     var winnerScreen : WinnerScreen
 
+    //update ship positions
     func updateShipPositions() {
-        //update ship positions
         ship1.pointX = ship1X
         ship1.pointY = ship1Y
         ship2.pointX = ship2X
@@ -72,6 +77,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship2.color = ship2Color
     }
 
+    //set the screen color choose variables
     func hasColor(Colored:Bool) {
         if Colored == true  {
             red = true
@@ -81,16 +87,20 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             hasColored = true
         }        
     }
-        
+
+    //renders the asteroids
     func importAsteroids() {
-        //cannot be too high of an asteroid count or it takes too long to find a safe place to render more asteroids, anything above 5 is too high
         let asteroidCount = Int.random(in:3 ... 5)
         var safe = false
         var centerX = 0
         var centerY = 0
         var radius = 0
+
+        //create asteroidCount amount of asteroids
         for _ in 1 ... asteroidCount {
             safe = false
+
+            //find a safe asteroid before rendering it
             while safe == false {
                 centerX = Int.random(in:canvasSize.center.x-400 ... canvasSize.center.x+400)
                 centerY = Int.random(in:canvasSize.center.y-300 ... canvasSize.center.y+300)
@@ -107,10 +117,13 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             }
         }
     }
+
+    //place the ships at the front of the screen for easy viewing
     func placeShipsFront() {
         insert(entity:ship1, at:.front)
         insert(entity:ship2, at:.front)
     }
+    
     //checks to see if the ship is running into an asteroid, direction 0 is forward, direction 1 is backward
     func checkBoundaries(player:Int) -> Bool {
         var safe = true
@@ -134,6 +147,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         }
         return safe
     }
+    
     //update the ship1X and ship1Y values
     func moveShip1(moveX:Double, moveY:Double) {
         let proposedX = Int(moveX * cos(ship1Rotate * Double.pi / 180.0))
@@ -147,6 +161,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             ship1Y += proposedY
         }
     }
+    
     //update the ship2X and ship2Y values
     func moveShip2(moveX:Double, moveY:Double) {
         //only proceed forwards if safe to do so
@@ -161,6 +176,8 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             ship2Y += proposedY
         }
     }
+
+    //control player 2's ship if the mouse is moved
     func onMouseMove(globalLocation:Point, movement:Point) {
         let xDif = globalLocation.x - ship2X
         let yDif = -(globalLocation.y - ship2Y)
@@ -186,12 +203,16 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         //update ship positions
         updateShipPositions()
     }
+
+    //fire a projectile from ship 2 if the mouse is clicked
     func onMouseDown(globalLocation:Point) {
         let projectile = Projectile(x:ship2X + Int(40.0 * cos(ship2Rotate * Double.pi / 180.0)), y:ship2Y - Int(40.0 * sin(ship2Rotate * Double.pi / 180.0)), degree:ship2Rotate, fireVelocity:ship2FireVelocity, shipColor:ship2Color, ship1X:&ship1X, ship2X:&ship2X, ship1Y:&ship1Y, ship2Y:&ship2Y, p1Lives:&ship1Lives, p2Lives:&ship2Lives, rects:asteroidRects)
         insert(entity:projectile, at:.front)
         projectiles.append(projectile)
         insert(entity:winnerScreen, at:.front)
     }
+
+    //handle key press events
     func onKeyDown(key:String, code:String, ctrlKey:Bool, shiftKey:Bool, altKey:Bool, metaKey:Bool) {
         switch(key) {
         case "w": //move ship1 forwards
@@ -211,12 +232,12 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             projectiles.append(projectile)
             insert(entity:projectile, at:.front)    
             insert(entity:winnerScreen, at:.front)
-        case "Enter" :
+        case "Enter" : //go to instructions screen
             if (!hasEntered) {
                 insert(entity:instructions, at:.front)
                 hasEntered = true
             }
-        case "e" :
+        case "e" : //go to ship color screen
             if (!hasInstructions && hasEntered) {
                 insert(entity:player1, at:.front)
                 placeShipsFront()
@@ -312,7 +333,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                     insert(entity:warning, at:.front)
                 }
             }
-        case "n" :
+        case "n" : //neptune has been chosen as the map
             if (hasRendered == false && hasColored) {
                 insert(entity:neptuneBackground, at:.front)
                 timeAmount = "2:00"
@@ -321,7 +342,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true
             }
-        case "m" :
+        case "m" : //mercury has been chosen as the map
             if (hasRendered == false && hasColored) {
                 insert(entity:mercuryBackground, at:.front)
                 timeAmount = "1:30"
@@ -330,7 +351,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true
             }
-        case "f" :
+        case "f" : //saturn has been chosen as the map
             if (hasRendered == false && hasColored) {
                 insert(entity:saturnBackground, at:.front)
                 timeAmount = "5:00"
@@ -339,7 +360,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true
             }
-        case "y" :
+        case "y" : //exploding star has been chosen as the map
             if (hasRendered == false && hasColored) {
                 insert(entity:starBackground, at:.front)
                 starBackground.begin()
@@ -349,9 +370,11 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
                 importAsteroids()
                 hasRendered = true 
             }
-        default:
+        default: //do not break the code if another key is pressed
             break
         }
+
+        //do not allow the ships to rotate past 0 to 360 degrees
         if (ship1Rotate < 0.0) {
             ship1Rotate += 360.0
         }
@@ -364,10 +387,13 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         else if (ship2Rotate >= 360.0) {
             ship2Rotate -= 360.0
         }
+
+        //update ship positions
         updateShipPositions()
     }
    
     init() {
+        //initialize game objects and advanced screens
         statusBar = StatusBar(timer:&timeAmount, endVar:&gameEnded, winVar:&gameWin, p1Life:&ship1Lives, p2Life:&ship2Lives, p1Color:&ship1Color, p2Color:&ship2Color)
         ship1 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.blue),blHoleStr:&blackHoleStrength)
         ship2 = Ships(PointX:0,PointY:0,rotation:0.0,color:Color(.green),blHoleStr:&blackHoleStrength)
@@ -389,15 +415,22 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
         ship1Y = (canvasSize.height / 2)
         ship2Y = (canvasSize.height / 2)
         updateShipPositions()
+
+        //get the size of the canvas
         self.canvasSize = canvasSize
+
+        //insert the starting and win screens
         insert(entity:startingScreen, at:.back)
-        insert(entity:winnerScreen, at:.front)    
+        insert(entity:winnerScreen, at:.front)
+
+        //set up the event handlers
         dispatcher.registerKeyDownHandler(handler: self)
         dispatcher.registerMouseMoveHandler(handler: self)
         dispatcher.registerMouseDownHandler(handler:self)
     }
     
     override func postTeardown() {
+        //teardown the event handlers
         dispatcher.unregisterKeyDownHandler(handler: self)
         dispatcher.unregisterMouseMoveHandler(handler: self)
         dispatcher.unregisterMouseDownHandler(handler:self)
