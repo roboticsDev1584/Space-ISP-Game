@@ -3,13 +3,14 @@ import Igis
 import Scenes
 
 class StarBackground : RenderableEntity {
-
+    //set up star images
     let star : Image
     let redGiant : Image
     let supernova : Image
     let blackHole : Image
     let stars : Image
-    
+
+    //initialize image scaling
     let starHeightPercent = 50.0
     let starWidthPercent = 90.0
     let redGiantHeightPercent = 80.0
@@ -19,6 +20,7 @@ class StarBackground : RenderableEntity {
     let blackHoleHeightPercent = 56.0
     let blackHoleWidthPercent = 56.0
 
+    //set up image change timing
     let waitStar : Int
     let changeStar : Int
     let waitRedGiant : Int
@@ -28,17 +30,26 @@ class StarBackground : RenderableEntity {
     let starTargetMultiplier : Double
     let redGiantTargetMultiplier : Double
     let blackHoleTargetMultiplier : Double
-    
-    var canvasSizeC : Size
-    var timeCount : Int // used to keep track of the current time when changing maps
-    var state : Int // used to tell the user the current state of the background
-    var currentScale : Double //used to resize the backgrounds in render()
 
+    //get canvas size
+    var canvasSizeC : Size
+
+    //keep track of the current time when changing maps
+    var timeCount : Int
+
+    // used to tell the user the current state of the background
+    var state : Int
+    
+    //used to resize the backgrounds in render()
+    var currentScale : Double
+
+    //set up black hole strength pointer to set current black hole strength
     var blHoleStrength = 0
     var blackHoleStrengthPointer : UnsafeMutablePointer<Int>
     
-    //map rendering functions
+    //render star images
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double, multiplier:Double, backgroundShow:Bool = true) {
+        //only render black background behind image if backgroundShow is set to true
         if (backgroundShow) {
             let backgroundRect = Rect(size:canvasSz)
             let background = Rectangle(rect:backgroundRect, fillMode:.fillAndStroke)
@@ -48,7 +59,8 @@ class StarBackground : RenderableEntity {
 
         //variable used to denote the smallest canvasSize dimension
         let canvasSzRef = (canvasSz.width < canvasSz.height) ? canvasSz.width : canvasSz.height
-        
+
+        //scale the star images and render when ready
         let scaledWidth = (planetWidth / 100.0) * Double(canvasSzRef)
         let scaledHeight = (planetHeight / 100.0) * Double(canvasSzRef)
         let planetRect = Rect(topLeft:Point(x:Int((Double(canvasSz.width) / 2.0) - (scaledWidth * multiplier / 2.0)),y:Int((Double(canvasSz.height) / 2.0) - (scaledHeight * multiplier / 2.0))), size:Size(width:Int(scaledWidth * multiplier), height:Int(scaledHeight * multiplier)))
@@ -57,11 +69,13 @@ class StarBackground : RenderableEntity {
             canvas.render(planet)
         }
     }
+    
     //this function starts the background animation
     func begin() {
         state = 0
         timeCount = 0
     }
+    
     //this function tells the higher-level code if the background is currently a star (0), red giant (1), etc.
     func getState() -> Int {
         return state
@@ -113,7 +127,7 @@ class StarBackground : RenderableEntity {
         super.init(name:"StarBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
-        //load the images
+        //prepare the images
         canvas.setup(star)
         canvas.setup(redGiant)
         canvas.setup(supernova)
@@ -192,6 +206,7 @@ class StarBackground : RenderableEntity {
         default:
             break
         }
+        //set the current black hole strength using a pointer
         blackHoleStrengthPointer.pointee = blHoleStrength
     }
 }

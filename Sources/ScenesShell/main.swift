@@ -1,10 +1,6 @@
 import Igis
 
-/*
- This main code is responsible for starting Igis and initializing
- the Director.
- It rarely needs to be altered.
- */
+//start IGIS and initialize the painter
 print("Starting...")
 do {
     let igis = Igis()

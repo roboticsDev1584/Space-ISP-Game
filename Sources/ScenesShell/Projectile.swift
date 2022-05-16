@@ -3,12 +3,14 @@ import Igis
 import Scenes
 
 class Projectile : RenderableEntity {
+    //set up the projectile IGIS objects
     var projectile : Ellipse
     let projectileBody : FillStyle
     let projectileOutline : StrokeStyle
     let asteroidRects : [Rect]
     var asteroidRectsSides : [Int] = []
-    
+
+    //set up initial projectile property variables
     let fireVelocity : Double
     var fireVelocityXSign = 5
     var fireVelocityYSign = 5
@@ -20,14 +22,15 @@ class Projectile : RenderableEntity {
     var inAstr = false
     var bounceCount = 0
 
+    //set up pointers for data storage
     var ship1XPointer : UnsafeMutablePointer<Int>
     var ship2XPointer : UnsafeMutablePointer<Int>
     var ship1YPointer : UnsafeMutablePointer<Int>
     var ship2YPointer : UnsafeMutablePointer<Int>
     var lives1Pointer : UnsafeMutablePointer<Int>
     var lives2Pointer : UnsafeMutablePointer<Int>
-    var p2Address : Int
 
+    //set up sound effect audio
     let fireAudio : Audio
     var firstRun = true
     
@@ -43,10 +46,11 @@ class Projectile : RenderableEntity {
         self.terminate = false
         self.asteroidRects = rects
 
-        //set up projectile sound
+        //set up projectile sound url
         guard let soundURL = URL(string:"https://roboticsdev1584.github.io/Save-San-Francisco/Content/ProjectileFire.mp3") else {
             fatalError("Failed to create URL for audio")
         }
+        //initialize sound audio
         fireAudio = Audio(sourceURL:soundURL)
 
         //initialize asteroidRectsSides array
@@ -54,14 +58,13 @@ class Projectile : RenderableEntity {
             asteroidRectsSides.append(0)
         }
 
-        //set up the pointers
+        //initialize the pointers
         ship1XPointer = .init(&ship1X)
         ship2XPointer = .init(&ship2X)
         ship1YPointer = .init(&ship1Y)
         ship2YPointer = .init(&ship2Y)
-        p2Address = p2Lives
 
-        //get the current life data from a pointer
+        //get the current life data from the pointers
         lives1Pointer = .init(&p1Lives)
         lives2Pointer = .init(&p2Lives)
         self.lives1 = lives1Pointer.pointee
@@ -76,17 +79,17 @@ class Projectile : RenderableEntity {
     }
 
     override func setup(canvasSize:Size, canvas:Canvas) {
+        //prepare audio
         canvas.setup(fireAudio)
     }
     
     override func render(canvas:Canvas) {
-        //play fire audio as soon as possible
+        //play fire audio as soon as possible and when ready
         if (fireAudio.isReady && firstRun) {
             canvas.render(fireAudio)
             firstRun = false
         }
         
-        //print(lives2Pointer.pointee)
         //calculate the velocity for the projectile based on rotation of ship
         let fireVelocityX = Int(fireVelocity * cos(degree * Double.pi / 180.0))
         let fireVelocityY = -Int(fireVelocity * sin(degree * Double.pi / 180.0))
@@ -95,26 +98,22 @@ class Projectile : RenderableEntity {
         projectile.center += Point(x:(fireVelocityX * fireVelocityXSign), y:(fireVelocityY * fireVelocityYSign))
         
         //set the sensitivity for hitting the other player
-        let rangeVal = 16 //used to be 10
+        let rangeVal = 16
 
+        //if the projectile hits player 1, player 1 loses 1 life
         if (((projectile.center.x >= (ship1XPointer.pointee - rangeVal) && projectile.center.x <= (ship1XPointer.pointee + rangeVal)) && (projectile.center.y >= (ship1YPointer.pointee - rangeVal) && projectile.center.y <= (ship1YPointer.pointee + rangeVal))) && !terminate) {
-            //player 1 loses one life
             lives1 -= 1
             terminate = true
         }
-        //if projectile hits player 2
+
+        //if the projectile hits player 2, player 2 loses 1 life
         else if (((projectile.center.x >= (ship2XPointer.pointee - rangeVal) && projectile.center.x <= (ship2XPointer.pointee + rangeVal)) && (projectile.center.y >= (ship2YPointer.pointee - rangeVal) && projectile.center.y <= (ship2YPointer.pointee + rangeVal))) && !terminate) {
-            //player 2 loses one life
             lives2 -= 1
             terminate = true
         }
 
         //set the current life data using pointers
         lives1Pointer.pointee = lives1
-        /*withUnsafeMutablePointer(to:&p2Address) { response in 
-          response.pointee = lives2
-          print(response.pointee)
-          }*/
         lives2Pointer.pointee = lives2
 
         //use containment to know when the projectile needs to change direction
@@ -151,16 +150,19 @@ class Projectile : RenderableEntity {
                     fireVelocityYSign *= -1
                     bounceCount += 1
                 }
-                if (sideState == 0) { //the projectile was fired into the center of the asteroid
+                //the projectile was fired into the center of the asteroid
+                if (sideState == 0) {
                     terminate = true
                 }
             }
         }
+        
         //update the asteroidRectsSides array for asteroid containment relation
         var tempAsteroidRectsSides : [Int] = []
         for index in 0 ..< asteroidRects.count {
             let asteroid = asteroidRects[index]
             let astrContainment = asteroid.containment(target:projectileRect)
+
             //mark the projectile's relation to the asteroid
             if (!astrContainment.intersection([.beyondFully, .overlapsFully]).isEmpty) {
                 tempAsteroidRectsSides.append(3)
@@ -171,7 +173,8 @@ class Projectile : RenderableEntity {
             else if (!astrContainment.intersection([.beyondVertically, .overlapsVertically]).isEmpty) {
                 tempAsteroidRectsSides.append(2)
             }
-            else { //the projectile must be fully contained in the asteroid, so use the previous value to determine what side it is coming from
+            //the projectile must be fully contained in the asteroid, so use the previous value to determine what side it is coming from in this case
+            else {
                 tempAsteroidRectsSides.append(asteroidRectsSides[index])
             }
         }

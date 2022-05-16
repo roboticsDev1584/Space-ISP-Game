@@ -3,14 +3,15 @@ import Igis
 import Scenes
 
 class SaturnBackground : RenderableEntity {
-
+    //set up planet image
     let saturn : Image
     let saturnHeightPercent = 60.0
     let saturnWidthPercent = 96.0
     var canvasSizeC : Size
     
-    //map rendering functions
+    //render planet function
     func renderPlanet(canvasSz:Size, canvas:Canvas, planet:Image, planetHeight:Double, planetWidth:Double) {
+        //render black background behind planet
         let backgroundRect = Rect(size:canvasSz)
         let background = Rectangle(rect:backgroundRect, fillMode:.fillAndStroke)
         let backgroundFill = FillStyle(color:Color(.black))
@@ -18,7 +19,8 @@ class SaturnBackground : RenderableEntity {
 
         //variable used to denote the smallest canvasSize dimension
         let canvasSzRef = (canvasSz.width < canvasSz.height) ? canvasSz.width : canvasSz.height
-        
+
+        //scale planet image and render when ready
         let scaledWidth = (planetWidth / 100.0) * Double(canvasSzRef)
         let scaledHeight = (planetHeight / 100.0) * Double(canvasSzRef)
         let planetRect = Rect(topLeft:Point(x:Int((Double(canvasSz.width) / 2.0) - (scaledWidth / 2.0)),y:Int((Double(canvasSz.height) / 2.0) - (scaledHeight / 2.0))), size:Size(width:Int(scaledWidth), height:Int(scaledHeight)))
@@ -31,19 +33,20 @@ class SaturnBackground : RenderableEntity {
     init() {
         //initialize variables
         canvasSizeC = Size(width:0, height:0)
-        //form the image url
+        
+        //set up the image url
         guard let saturnURL = URL(string:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Saturn_during_Equinox.jpg/800px-Saturn_during_Equinox.jpg") else {
             fatalError("Failed to create neptune URL")
         }
-        //form the image object
+        
+        //initialize the planet image
         saturn = Image(sourceURL:saturnURL)
         
         super.init(name:"SaturnBackground")
     }
     override func setup(canvasSize:Size, canvas:Canvas) {
-        //load the image
+        //prepare the image
         canvas.setup(saturn)
-
         canvasSizeC = canvasSize
     }
     override func render(canvas:Canvas) {

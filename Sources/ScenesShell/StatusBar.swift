@@ -3,14 +3,17 @@ import Igis
 import Scenes
 
 class StatusBar : RenderableEntity {
+    //set up life and time variables
     var player1Life = 3
     var player2Life = 3
     var time = "0:00"
-    
+
+    //set up end state variables
     var count = 0
     var end = false
     var win = 0
 
+    //share data with InteractionLayer using pointers
     var endPointer : UnsafeMutablePointer<Bool>
     var winPointer : UnsafeMutablePointer<Int>
     var timePointer : UnsafeMutablePointer<String>
@@ -19,15 +22,16 @@ class StatusBar : RenderableEntity {
     var p1ColorPointer : UnsafeMutablePointer<Color>
     var p2ColorPointer : UnsafeMutablePointer<Color>
 
+    //initialize player life text color
     var p1LifeColor = Color(.white)
     var p2LifeColor = Color(.white)
 
     //need some way to indicate to InteractionLayer.swift that the game has ended
     init(timer:inout String, endVar:inout Bool, winVar:inout Int, p1Life:inout Int, p2Life:inout Int, p1Color:inout Color, p2Color:inout Color) {
+        //initialize pointers
         timePointer = .init(&timer)
         endPointer = .init(&endVar)
         winPointer = .init(&winVar)
-
         p1LifePointer = .init(&p1Life)
         p2LifePointer = .init(&p2Life)
         p1ColorPointer = .init(&p1Color)
@@ -36,21 +40,24 @@ class StatusBar : RenderableEntity {
         super.init(name:"StatusBar")
     }
 
-    //when a game ends, status bar is deinitialized
+    //when a game ends, the status bar is deinitialized
     deinit {
 
     }
 
     override func render(canvas:Canvas) {
+        //get size of canvas
         let canvasSize = canvas.canvasSize!
 
         //get current player colors
         p1LifeColor = p1ColorPointer.pointee
         p2LifeColor = p2ColorPointer.pointee
+
         //get current player lives
         player1Life = p1LifePointer.pointee
         player2Life = p2LifePointer.pointee
-        
+
+        //get curren time
         time = timePointer.pointee
         
         //every 30 executions, 1 second elapses
@@ -86,8 +93,10 @@ class StatusBar : RenderableEntity {
             time = "\(minutes):\(zeroSec)\(seconds % 10)"
         }
 
+        //set the decremented time using a pointer
         timePointer.pointee = time
-        
+
+        //the game has ended by a player losing all lives
         if (player1Life == 0) {
             end = true
             win = 2
@@ -96,6 +105,8 @@ class StatusBar : RenderableEntity {
             end = true
             win = 1
         }
+
+        //if the game has not ended, render status bar
         if (!end) {
             //render banner text
             let fill = FillStyle(color:p1LifeColor)
@@ -116,13 +127,13 @@ class StatusBar : RenderableEntity {
         else {
             //deletes the banner
             canvas.render()
-            //send the end and win data
+            
+            //send the end and win data to InteractionLayer
             endPointer.pointee = end
             winPointer.pointee = win
-            //p1LifePointer.pointee = 3
-            //p1LifePointer.pointee = 3
         }
 
+        //keep track of current time using count
         count += 1
     }
 }

@@ -3,31 +3,38 @@ import Igis
 import Scenes
 
 class ChooseMap : RenderableEntity {
+    //set up background image and warning
     let background : Image
     var warning = Warning()
     
     init() {
-        // Using a meaningful name can be helpful for debugging
+        //set up background image url
         guard let backgroundURL = URL(string:"https://walrus-assets.s3.amazonaws.com/img/Space-735x490-1.jpg") else {
             fatalError("failed to load backgroundURL")
         }
+        //initialize background image
         background = Image(sourceURL:backgroundURL)
         super.init(name:"ChooseMap")
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        //set up background image
         canvas.setup(background)
         warning.terminate = true
         
     }
-    
+
     override func render(canvas:Canvas) {
+        //get the size of the canvas
         let canvasSize = canvas.canvasSize!
-        
+
+        //only render background image when ready
         if background.isReady {
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
         }
+
+        //render text for choose background screen
         let fillStyle = FillStyle(color:Color(.deepskyblue))
         let words = Text(location:Point(x:canvasSize.center.x-450,y:100), text:"Choose Your Setting")
         words.font = "80pt Megrim"

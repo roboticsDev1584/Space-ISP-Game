@@ -3,27 +3,34 @@ import Igis
 import Scenes
 
 class Instructions : RenderableEntity {
+    //set up background image
     let background : Image
+    
     init() {
-        // Using a meaningful name can be helpful for debugging
+        //set up background url
         guard let backgroundURL = URL(string:"https://images.unsplash.com/photo-1520034475321-cbe63696469a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c3BhY2UlMjBzdGFyc3xlbnwwfHwwfHw%3D&w=1000&q=80") else {
             fatalError("failed to load backgroundURL")
         }
+        //initialize background image
         background = Image(sourceURL:backgroundURL)
         super.init(name:"instructions")
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        //prepare background image
         canvas.setup(background)
     }
     override func render(canvas:Canvas) {
+        //get size of canvas
         let canvasSize = canvas.canvasSize!
 
+        //only render background image when ready
         if background.isReady {
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
         }
         
+        //render instructions screen text
         let fillStyle = FillStyle(color:Color(.ivory))
         let words = Text(location:Point(x:canvasSize.center.x-300,y:100), text:"How To Play")
         words.font = "80pt megrim"

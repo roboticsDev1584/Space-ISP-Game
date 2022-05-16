@@ -3,26 +3,34 @@ import Igis
 import Scenes
 
 class Player2Choose : RenderableEntity {
+    //set up background image
     let background : Image
+    
     init() {
-        // Using a meaningful name can be helpful for debugging
+        //set up image url
         guard let backgroundURL = URL(string:"https://digitaladdictsblog.com/wp-content/uploads/2019/01/shutterstock_295846730.jpg") else {
             fatalError("failed to load backgroundURL")
         }
+        //initialize background image
         background = Image(sourceURL:backgroundURL)
         super.init(name:"Player2Choose")
     }
     
     override func setup(canvasSize:Size,canvas:Canvas) {
+        //prepare background image
         canvas.setup(background)
     }
     override func render(canvas:Canvas) {
+        //get size of canvas
         let canvasSize = canvas.canvasSize!
 
+        //render background image when ready
         if background.isReady{
             background.renderMode = .destinationRect(Rect(topLeft:Point(x:0, y:0), size:Size(width:canvasSize.center.x*2, height:canvasSize.center.y*2)))
             canvas.render(background)
         }
+
+        //render player 2 choose screen text
         let fill = FillStyle(color:Color(.white))
         let words = Text(location:Point(x:canvasSize.center.x-680,y:100), text:"Player 2 choose your ship color")
         words.font = "80pt Callout"
