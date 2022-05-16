@@ -56,7 +56,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
     let startingScreen = StartingScreen()
     let player1 = Player1Choose()
     let player2 = Player2Choose()
-    let Instructions = instructions()
+    let instructions = Instructions()
     var statusBar : StatusBar
     var winnerScreen : WinnerScreen
 
@@ -213,7 +213,7 @@ class InteractionLayer : Layer, KeyDownHandler, MouseMoveHandler, MouseDownHandl
             insert(entity:winnerScreen, at:.front)
         case "Enter" :
             if (!hasEntered) {
-                insert(entity:Instructions, at:.front)
+                insert(entity:instructions, at:.front)
                 hasEntered = true
             }
         case "e" :

@@ -2,7 +2,7 @@ import Scenes
 import Igis
 import Foundation
 
-class instructions : RenderableEntity {
+class Instructions : RenderableEntity {
     let background : Image
     init() {
         // Using a meaningful name can be helpful for debugging
